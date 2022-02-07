@@ -1,0 +1,7 @@
+{
+  "name": "Jeu-de-Piste-Kt-Builder",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
