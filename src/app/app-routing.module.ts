@@ -5,12 +5,12 @@ import { NgModule } from '@angular/core';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/Inbox',
+    redirectTo: 'Edition',
     pathMatch: 'full'
   },
   {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
+    path: 'Edition/:id',
+    loadChildren: () => import('./edition/edition.module').then( m => m.EditionPageModule)
   }
 ];
 

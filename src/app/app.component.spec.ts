@@ -1,9 +1,8 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
-import { RouterTestingModule } from '@angular/router/testing';
-
 import { AppComponent } from './app.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AppComponent', () => {
 
@@ -39,8 +38,8 @@ describe('AppComponent', () => {
     const app = fixture.nativeElement;
     const menuItems = app.querySelectorAll('ion-item');
     expect(menuItems.length).toEqual(12);
-    expect(menuItems[0].getAttribute('ng-reflect-router-link')).toEqual('/folder/Inbox');
-    expect(menuItems[1].getAttribute('ng-reflect-router-link')).toEqual('/folder/Outbox');
+    expect(menuItems[0].getAttribute('ng-reflect-router-link')).toEqual('/edition/Inbox');
+    expect(menuItems[1].getAttribute('ng-reflect-router-link')).toEqual('/edition/Outbox');
   }));
 
 });
