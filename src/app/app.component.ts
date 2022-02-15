@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+
   public menuItems = [
     { title: 'New', method: this.newFile, icon: 'add' },
     { title: 'Open', method: this.openFile, icon: 'download' },
