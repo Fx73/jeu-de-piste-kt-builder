@@ -1,3 +1,4 @@
+import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,15 +7,40 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public appPages = [
-    { title: 'New', url: '/Edition/current', icon: 'add' },
-    { title: 'Recent', url: '/Recent', icon: 'time' },
-    { title: 'Save', url: '/Save', icon: 'save' },
-    { title: 'Export', url: '/Export', icon: 'archive' },
-    { title: 'Import', url: '/Import', icon: 'download' },
-    { title: 'Remove', url: '/Remove', icon: 'trash' },
-    { title: 'Account', url: '/Account', icon: 'heart' },
+
+  public menuItems = [
+    { title: 'New', method: this.newFile, icon: 'add' },
+    { title: 'Open', method: this.openFile, icon: 'download' },
+    { title: 'Save', method: this.saveFile, icon: 'save' },
+    { title: 'Export', method: this.exportFile, icon: 'archive' },
+    //{ title: 'Import', method: '/Import', icon: 'download' },
+    { title: 'Account', method: '/Account', icon: 'heart' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+
+  constructor(private chooser: Chooser) {}
+
+
+  newFile(){
+    console.log('New');
+  }
+
+  openFile(){
+    console.log('Open');
+  }
+
+  saveFile(){
+    console.log('Save');
+  }
+
+  exportFile(){
+    console.log('Export');
+  }
+
+  pickFile(){
+    this.chooser.getFile()
+  .then(file => console.log(file ? file.name : 'canceled'))
+  .catch((error: any) => console.error(error));
+  }
+
+
 }
