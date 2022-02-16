@@ -38,6 +38,10 @@ export class EditionPage implements OnInit {
 
     }
 
+    stageDrop(event: CdkDragDrop<string[]>){
+      console.log(event);
+      moveItemInArray(this.scenario.stages, event.previousIndex-1, event.currentIndex-1);
+    }
 
   loadScenarionFromJson(json: string){
     this.scenario = JSON.parse(json);

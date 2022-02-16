@@ -13,7 +13,7 @@
 
 
 <ion-content [fullscreen]="true" [scrollX]="true">
-  <ion-row >
+  <ion-row cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="stageDrop($event)">
     <!-- Card Title -->
     <ion-card>
       <ion-item>
@@ -50,12 +50,14 @@
     </ion-card>
 
   <!-- Cards Game -->
-  <ion-card *ngFor="let stage of scenario.stages;">
+  <ion-card *ngFor="let stage of scenario.stages;" cdkDrag>
+    <div class="stage-placeholder" *cdkDragPlaceholder></div>
     <ion-item>
       <ion-label position="stacked">Name</ion-label>
       <ion-input [value]="stage.name"></ion-input>
     </ion-item>
-    <div cdkDropList>
+
+
     <ion-card *ngFor="let element of stage.elements;" >
       <ion-label position="stacked">Type</ion-label>
       <ion-input [value]="element.type"></ion-input>
@@ -64,7 +66,6 @@
       <ion-label position="stacked">Additional</ion-label>
       <ion-input [value]="element.additional"></ion-input>
     </ion-card>
-  </div>
 
     <ion-item>
       <ion-label position="stacked">next :</ion-label>
