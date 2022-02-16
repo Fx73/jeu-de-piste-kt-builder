@@ -1,22 +1,76 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>{{ edition }}</ion-title>
+    <ion-buttons slot="start" cdkDropList [cdkDropListData]="" cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
+      <ion-card class="toolcard" cdkDrag *ngFor="let tool of tools;">
+        <ion-label position="stacked">{{tool.name}}</ion-label><br>
+        <ion-icon [name]="tool.icon"></ion-icon>
+      </ion-card>
+
+     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">{{ edition }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" [scrollX]="true">
+  <ion-row >
+    <!-- Card Title -->
+    <ion-card>
+      <ion-item>
+        <ion-label  position="stacked">Title</ion-label>
+        <ion-input [value]="scenario.title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label  position="stacked">Creator</ion-label>
+        <ion-input [value]="scenario.creator" ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label  position="stacked">Image</ion-label>
+        <br>
+        <ion-button color="medium" fill="outline">
+          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+        </ion-button>
 
-  <div id="container">
-    <strong class="capitalize">{{ edition }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      </ion-item>
+      <ion-item>
+        <ion-label  position="stacked">Description</ion-label>
+        <ion-textarea [value]="scenario.description"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Copyright</ion-label>
+        <ion-input [value]="scenario.copyright"></ion-input>
+      </ion-item>
+      <ion-card-content>
+        Variables used : <br>
+        <div *ngFor="let variable of scenario.variables.values;">
+          {{variable[0]}}
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  <!-- Cards Game -->
+  <ion-card *ngFor="let stage of scenario.stages;">
+    <ion-item>
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input [value]="stage.name"></ion-input>
+    </ion-item>
+    <div cdkDropList>
+    <ion-card *ngFor="let element of stage.elements;" >
+      <ion-label position="stacked">Type</ion-label>
+      <ion-input [value]="element.type"></ion-input>
+      <ion-label position="stacked">Content</ion-label>
+      <ion-input [value]="element.content"></ion-input>
+      <ion-label position="stacked">Additional</ion-label>
+      <ion-input [value]="element.additional"></ion-input>
+    </ion-card>
   </div>
+
+    <ion-item>
+      <ion-label position="stacked">next :</ion-label>
+      <ion-input [value]="stage.next"></ion-input>
+    </ion-item>
+  </ion-card>
+</ion-row>
+
 </ion-content>

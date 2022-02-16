@@ -13,6 +13,6 @@ export class StageElement{
 constructor(
   public type: TYPE,
   public content: string,
-  private additional: Array<string> = Array()
+  public additional: Array<string> = Array()
 ){}
 }

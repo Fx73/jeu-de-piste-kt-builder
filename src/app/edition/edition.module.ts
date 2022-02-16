@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import { EditionPage } from './edition.page';
 import { EditionPageRoutingModule } from './edition-routing.module';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +11,8 @@ import { NgModule } from '@angular/core';
     CommonModule,
     FormsModule,
     IonicModule,
-    EditionPageRoutingModule
+    EditionPageRoutingModule,
+    DragDropModule
   ],
   declarations: [EditionPage]
 })

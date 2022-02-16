@@ -1,5 +1,6 @@
 import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -16,13 +17,18 @@ export class AppComponent {
     { title: 'Export', method: this.exportFile, icon: 'archive' },
     //{ title: 'Import', method: '/Import', icon: 'download' },
     { title: 'Account', method: '/Account', icon: 'heart' },
+    { title: 'Help', method: '/Help', icon: 'information-circle' },
+
   ];
 
-  constructor(private chooser: Chooser) {}
+  constructor(
+    private chooser: Chooser,
+    private router: Router
+    ) {}
 
 
   newFile(){
-    console.log('New');
+    this.router.navigateByUrl('/Edition/test');
   }
 
   openFile(){
