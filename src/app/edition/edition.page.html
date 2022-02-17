@@ -1,31 +1,34 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start" cdkDropList [cdkDropListData]="" cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
+    <ion-buttons slot="start" cdkDropList [cdkDropListData]="" cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)" cdkDropListSortingDisabled>
       <ion-card class="toolcard" cdkDrag *ngFor="let tool of tools;">
         <ion-label position="stacked">{{tool.name}}</ion-label><br>
         <ion-icon [name]="tool.icon"></ion-icon>
       </ion-card>
 
-     </ion-buttons>
+    </ion-buttons>
 
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content [fullscreen]="true" [scrollX]="true">
-  <ion-row cdkDropList cdkDropListOrientation="horizontal" class="example-list" (cdkDropListDropped)="stageDrop($event)">
+  <ion-row cdkDropList cdkDropListOrientation="horizontal" class="example-list"
+    (cdkDropListSorted)="cdkDragMoved($event)" (cdkDropListDropped)="stageMove($event)">
+
     <!-- Card Title -->
-    <ion-card>
+    <ion-card class="cardtitle">
       <ion-item>
-        <ion-label  position="stacked">Title</ion-label>
+        <ion-label position="stacked">Title</ion-label>
         <ion-input [value]="scenario.title"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label  position="stacked">Creator</ion-label>
-        <ion-input [value]="scenario.creator" ></ion-input>
+        <ion-label position="stacked">Creator</ion-label>
+        <ion-input [value]="scenario.creator"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label  position="stacked">Image</ion-label>
+        <ion-label position="stacked">Image</ion-label>
         <br>
         <ion-button color="medium" fill="outline">
           <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
@@ -33,7 +36,7 @@
 
       </ion-item>
       <ion-item>
-        <ion-label  position="stacked">Description</ion-label>
+        <ion-label position="stacked">Description</ion-label>
         <ion-textarea [value]="scenario.description"></ion-textarea>
       </ion-item>
 
@@ -49,29 +52,66 @@
       </ion-card-content>
     </ion-card>
 
-  <!-- Cards Game -->
-  <ion-card *ngFor="let stage of scenario.stages;" cdkDrag>
-    <div class="stage-placeholder" *cdkDragPlaceholder></div>
-    <ion-item>
-      <ion-label position="stacked">Name</ion-label>
-      <ion-input [value]="stage.name"></ion-input>
-    </ion-item>
+    <!-- Cards Game -->
+    <ion-card *ngFor="let stage of scenario.stages;let i = index">
+      <!--div class="stage-placeholder" [ngStyle]="{'min-height.px':placeholdersize  }" *cdkDragPlaceholder>
+      <ion-label class="labelposition">{{placeholderindex}}</ion-label>
+    </div-->
+      <ion-grid>
 
+        <ion-row class="ion-no-padding">
+          <ion-col size="9">
+            <ion-label position="stacked">Name</ion-label>
+            <ion-input [value]="stage.name"></ion-input>
+          </ion-col>
+          <ion-col size="1">
+            <ion-icon class="ion-no-padding" name="caret-back" (click)="stageMove(i,i-1)"></ion-icon>
+          </ion-col>
+          <ion-col size="1">
+            <ion-input class="ion-no-padding" #inputpos [value]="i" inputmode="numeric" min="0" (ionBlur)="stageMove(i,inputpos.value)" (keyup.enter)="stageMove(i,0)"></ion-input>
+          </ion-col>
+          <ion-col size="1">
+            <ion-icon class="ion-no-padding"name="caret-forward" (click)="stageMove(i,i+1)"></ion-icon>
+          </ion-col>
+          <!--div class="stage-handle">
+        <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+          <path d="M0 0h24v24H0z" fill="none"></path>
+        </svg>
+      </div-->
+        </ion-row>
 
-    <ion-card *ngFor="let element of stage.elements;" >
-      <ion-label position="stacked">Type</ion-label>
-      <ion-input [value]="element.type"></ion-input>
-      <ion-label position="stacked">Content</ion-label>
-      <ion-input [value]="element.content"></ion-input>
-      <ion-label position="stacked">Additional</ion-label>
-      <ion-input [value]="element.additional"></ion-input>
+        <ion-row>
+          <ion-col size="12">
+            <ion-label position="stacked">Content :</ion-label>
+            <ion-card *ngFor="let element of stage.elements;">
+              <ion-label position="stacked">Type</ion-label>
+              <ion-input [value]="element.type"></ion-input>
+              <ion-label position="stacked">Content</ion-label>
+              <ion-input [value]="element.content"></ion-input>
+              <ion-label position="stacked">Additional</ion-label>
+              <ion-input [value]="element.additional"></ion-input>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">Next :</ion-label>
+            <ion-input [value]="stage.next"></ion-input>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
     </ion-card>
 
-    <ion-item>
-      <ion-label position="stacked">next :</ion-label>
-      <ion-input [value]="stage.next"></ion-input>
-    </ion-item>
-  </ion-card>
-</ion-row>
 
+    <!-- Cards Plus -->
+    <ion-card class="cardplus" (click)="addStage()">
+      <ion-card-content>
+        <ion-icon [name]="'add'"></ion-icon>
+      </ion-card-content>
+    </ion-card>
+
+  </ion-row>
 </ion-content>

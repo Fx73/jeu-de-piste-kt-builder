@@ -19,12 +19,17 @@ export class EditionPage implements OnInit {
     {name:'Image', icon:'image'},
   ];
 
+   placeholdersize: number;
+   placeholderindex = 0;
 
   constructor(private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.edition = this.activatedRoute.snapshot.paramMap.get('id');
+    this.placeholdersize = document.getElementsByClassName('cardtitle').item(0).getBoundingClientRect().width;
+
+
     this.scenarioTest();
     console.log(this.scenario);
 
@@ -35,13 +40,26 @@ export class EditionPage implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
       console.log(event);
-
+      moveItemInArray(this.scenario.stages,0,0);
     }
 
-    stageDrop(event: CdkDragDrop<string[]>){
-      console.log(event);
-      moveItemInArray(this.scenario.stages, event.previousIndex-1, event.currentIndex-1);
-    }
+
+  stageMove(sender: number,target: any){
+      console.log(sender,target);
+
+      moveItemInArray(this.scenario.stages,sender,target);
+
+
+  }
+
+  cdkDragMoved(event: any){
+    console.log(event);
+  }
+
+
+  addStage(){
+    this.scenario.stages.push(new Stage(''));
+  }
 
   loadScenarionFromJson(json: string){
     this.scenario = JSON.parse(json);

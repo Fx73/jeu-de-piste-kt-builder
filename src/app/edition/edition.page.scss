@@ -29,6 +29,26 @@ ion-menu-button {
 
 .stage-placeholder {
   border: dotted 3px #999;
-  min-width: 60px;
+  min-width: 200px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.stage-handle {
+  top: 10px;
+  right: 10px;
+  color: #ccc;
+  cursor: move;
+  width: 24px;
+  height: 24px;
+}
+
+.cardplus{
+  display: flex;
+  align-items: center;
+  font-size: 3.8rem;
+  border: dashed  2px rgb(53, 53, 53);
+
+}
+.cardplus ion-icon{
+  font-size: 4rem;
 }
