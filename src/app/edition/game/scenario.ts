@@ -23,9 +23,4 @@ constructor(
   public stages: Array<Stage> = new Array()
   ){}
 
-
-
-
-
-
 }

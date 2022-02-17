@@ -1,9 +1,10 @@
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { Scenario } from './game/scenario';
 import { Stage } from './game/stage';
+import { StageElement } from './game/element/stage_element';
 
 @Component({
   selector: 'app-edition',
@@ -38,34 +39,54 @@ export class EditionPage implements OnInit {
   }
 
 
-  drop(event: CdkDragDrop<string[]>) {
-      console.log(event);
-      moveItemInArray(this.scenario.stages,0,0);
-    }
 
 
-  stageMove(sender: number,target: any){
-      console.log(sender,target);
-
-      moveItemInArray(this.scenario.stages,sender,target);
-
+  dropTool(event: CdkDragDrop<string[]>){
 
   }
+
+
 
   cdkDragMoved(event: any){
     console.log(event);
   }
 
 
-  addStage(){
-    this.scenario.stages.push(new Stage(''));
-  }
+//Region Model
+stageMove(sender: number,target: any){
+  moveItemInArray(this.scenario.stages,sender,target);
+}
 
+elementMove(event: CdkDragDrop<string[]>) {
+  const stageFrom: number = +event.previousContainer.id;
+  const stageTo: number = +event.container.id;
+  const indexFrom: number = event.previousIndex;
+  const indexTo: number = event.currentIndex;
+
+  const previousElem: Array<StageElement> = this.scenario.stages[stageFrom].elements;
+  const nextElem: Array<StageElement> = this.scenario.stages[stageTo].elements;
+
+  const elem: StageElement= previousElem.splice(indexFrom,1)[0];
+  nextElem.splice(indexTo,0,elem);
+}
+//#endregion
+
+//region UI
+
+addStage(){
+  this.scenario.stages.push(new Stage(''));
+}
+
+//#endregion
+
+
+//#region Utilities
   loadScenarionFromJson(json: string){
     this.scenario = JSON.parse(json);
   }
 
 
+//#endregion
 
 
 
@@ -73,8 +94,7 @@ export class EditionPage implements OnInit {
 
 
 
-
-
+//#region test
 
 
   scenarioTest(){
@@ -334,3 +354,4 @@ export class EditionPage implements OnInit {
   }
   `;
 }
+//#endregion
