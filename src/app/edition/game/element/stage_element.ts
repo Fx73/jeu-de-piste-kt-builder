@@ -1,3 +1,5 @@
+import { EditionPage } from './../../edition.page';
+
 /**
  * StageElement
  * Elements used to show an item on screen
@@ -14,5 +16,8 @@ constructor(
   public type: TYPE,
   public content: string,
   public additional: Array<string> = Array()
-){}
+){
+}
+
+
 }

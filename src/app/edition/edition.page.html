@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start" cdkDropList [cdkDropListData]="" cdkDropListOrientation="horizontal"
       (cdkDropListDropped)="dropTool($event)" cdkDropListSortingDisabled>
-      <ion-card class="toolcard" cdkDrag *ngFor="let tool of tools;">
+      <ion-card class="toolcard" cdkDrag *ngFor="let tool of getTools();">
         <ion-label position="stacked">{{tool.name}}</ion-label><br>
         <ion-icon [name]="tool.icon"></ion-icon>
       </ion-card>
@@ -83,13 +83,11 @@
         <ion-row>
          <ion-label>&nbsp; Content :</ion-label>
           <ion-col id="{{i}}" class="droplist" size="12" cdkDropList (cdkDropListDropped)="elementMove($event)">
-            <ion-card class="elementcard"  *ngFor="let element of stage.elements;" cdkDrag>
-              <ion-label position="stacked">Type</ion-label>
-              <ion-input [value]="element.type"></ion-input>
-              <ion-label position="stacked">Content</ion-label>
-              <ion-input [value]="element.content"></ion-input>
-              <ion-label position="stacked">Additional</ion-label>
-              <ion-input [value]="element.additional"></ion-input>
+            <ion-card class="elementcard"  *ngFor="let element of stage.elements;" cdkDrag >
+              <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
+              <ion-input name="Content" [value]="element.content"></ion-input>
+              <ion-label *ngIf="element.additional?.length" name="Additional" position="stacked"></ion-label>
+              <ion-input  *ngIf="element.additional?.length" [value]="element.additional"></ion-input>
             </ion-card>
           </ion-col>
         </ion-row>

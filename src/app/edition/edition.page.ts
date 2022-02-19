@@ -1,10 +1,10 @@
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
+import { StageElement, TYPE } from './game/element/stage_element';
 
 import { ActivatedRoute } from '@angular/router';
 import { Scenario } from './game/scenario';
 import { Stage } from './game/stage';
-import { StageElement } from './game/element/stage_element';
 
 @Component({
   selector: 'app-edition',
@@ -12,13 +12,21 @@ import { StageElement } from './game/element/stage_element';
   styleUrls: ['./edition.page.scss'],
 })
 export class EditionPage implements OnInit {
+  public static tools = [
+    {name:'Texte', icon:'document-text', type : TYPE[TYPE.TXT]},
+    {name:'Image', icon:'image' , type : TYPE[TYPE.IMG]},
+    {name:'Button', icon:'link' , type : TYPE[TYPE.BTN]},
+    {name:'Edit', icon: 'create' , type : TYPE[TYPE.EDT]},
+    {name:'Step', icon: 'swap-horizontal' , type : TYPE[TYPE.ETP]},
+    {name:'Toast', icon: 'sparkles' , type : TYPE[TYPE.TST]},
+    {name:'QR', icon: 'qr-code' , type : TYPE[TYPE.QRC]},
+    {name:'Lock', icon: 'lock-closed', type : TYPE[TYPE.LCK]},
+    {name:'Unlock', icon: 'lock-open', type : TYPE[TYPE.UCK]},
+  ];
 
   public edition: string;
   public scenario: Scenario;
-  public tools = [
-    {name:'Texte', icon:'document-text'},
-    {name:'Image', icon:'image'},
-  ];
+
 
    placeholdersize: number;
    placeholderindex = 0;
@@ -29,10 +37,6 @@ export class EditionPage implements OnInit {
   ngOnInit() {
     this.edition = this.activatedRoute.snapshot.paramMap.get('id');
     this.placeholdersize = document.getElementsByClassName('cardtitle').item(0).getBoundingClientRect().width;
-
-
-    this.scenarioTest();
-    console.log(this.scenario);
 
     this.loadScenarionFromJson(this.jsonScenario);
     console.log(this.scenario);
@@ -77,10 +81,29 @@ addStage(){
   this.scenario.stages.push(new Stage(''));
 }
 
+
+
+getElementContent(element: StageElement){
+
+}
+
+getElementAdditional(element: StageElement){
+
+}
+
+getElementIcon(element: StageElement){
+  const tool = this.getTools().find(t => t.type === element.type.toString());
+  return tool?.icon ?? 'close-circle';
+}
+
 //#endregion
 
 
 //#region Utilities
+
+getTools(){
+  return EditionPage.tools;
+}
   loadScenarionFromJson(json: string){
     this.scenario = JSON.parse(json);
   }
@@ -95,25 +118,6 @@ addStage(){
 
 
 //#region test
-
-
-  scenarioTest(){
-    this.scenario = new Scenario('test','fx','ceci est un test','');
-    this.scenario.stages = [
-      new Stage('stage 0'),
-      new Stage('stage 1'),
-      new Stage('stage 2'),
-      new Stage('stage 3'),
-      new Stage('stage 4'),
-      new Stage('stage 5'),
-      new Stage('stage 6'),
-      new Stage('stage 7'),
-      new Stage('stage 8'),
-    ];
-  }
-
-
-
   // eslint-disable-next-line @typescript-eslint/member-ordering
   jsonScenario = `
   {
