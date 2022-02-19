@@ -66,7 +66,9 @@ export class EditionPage implements OnInit {
 stageMove(sender: number,target: any){
   moveItemInArray(this.scenario.stages,sender,target);
 }
-
+understageMove(sender: number,undersender: number,target: any){
+  moveItemInArray(this.scenario.stages[sender].understages,undersender,target);
+}
 elementMove(event: CdkDragDrop<string[]>) {
   const stageFrom: number = +event.previousContainer.id;
   const stageTo: number = +event.container.id;
@@ -75,6 +77,19 @@ elementMove(event: CdkDragDrop<string[]>) {
 
   const previousElem: Array<StageElement> = this.scenario.stages[stageFrom].elements;
   const nextElem: Array<StageElement> = this.scenario.stages[stageTo].elements;
+
+  const elem: StageElement= previousElem.splice(indexFrom,1)[0];
+  nextElem.splice(indexTo,0,elem);
+}
+
+underelementMove(event: CdkDragDrop<string[]>, stageid: number) {
+  const stageFrom: number = +event.previousContainer.id;
+  const stageTo: number = +event.container.id;
+  const indexFrom: number = event.previousIndex;
+  const indexTo: number = event.currentIndex;
+
+  const previousElem: Array<StageElement> = this.scenario.stages[stageid].understages[stageFrom].elements;
+  const nextElem: Array<StageElement> = this.scenario.stages[stageid].understages[stageTo].elements;
 
   const elem: StageElement= previousElem.splice(indexFrom,1)[0];
   nextElem.splice(indexTo,0,elem);
@@ -135,6 +150,12 @@ getElementIcon(element: StageElement){
 
 addStage(){
   this.scenario.stages.push(new Stage(''));
+}
+addUnderStage(stageindex: number){
+  if(!this.scenario.stages[stageindex].understages){
+    this.scenario.stages[stageindex].understages = new Array();
+  }
+  this.scenario.stages[stageindex].understages?.push(new Stage(''));
 }
 addVariable(){
   this.scenario.variables.values.push(['',0]);

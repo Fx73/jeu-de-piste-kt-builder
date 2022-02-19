@@ -75,7 +75,7 @@
             <ion-icon class="ion-no-padding" name="caret-back" (click)="stageMove(i,i-1)"></ion-icon>
           </ion-col>
           <ion-col size="1">
-            <ion-input class="ion-no-padding" #inputpos [value]="i" inputmode="numeric" min="0" (ionBlur)="stageMove(i,inputpos.value)" (keyup.enter)="stageMove(i,0)"></ion-input>
+            <ion-input class="ion-no-padding" #inputpos [value]="i" inputmode="numeric" min="0" (ionBlur)="stageMove(i,inputpos.value)" (keyup.enter)="stageMove(i,inputpos.value)"></ion-input>
           </ion-col>
           <ion-col size="1">
             <ion-icon class="ion-no-padding"name="caret-forward" (click)="stageMove(i,i+1)"></ion-icon>
@@ -103,6 +103,43 @@
             </ion-card>
           </ion-col>
         </ion-row>
+
+        <ion-row>
+          <ion-label>&nbsp; UnderStages :</ion-label>
+          <ion-col id="{{i}}" class="droplist" size="12">
+            <ion-card class="elementcard"  *ngFor="let understage of stage.understages;let k = index" >
+              <ion-row class="ion-no-padding">
+                <ion-col size="11">
+                  <ion-input [value]="understage.name">Name : </ion-input>
+                </ion-col>
+                <ion-col size="1">
+                  <ion-input class="ion-no-padding" #inputpos [value]="k" type="number" inputmode="numeric" min="0" (change)="understageMove(i,k,inputpos.value)" (keyup.enter)="understageMove(i,k,inputpos.value)"></ion-input>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-label>&nbsp; Content :</ion-label>
+                 <ion-col id="{{k}}" class="droplist" size="12" cdkDropList (cdkDropListDropped)="underelementMove($event,i)">
+                   <ion-card class="elementcard"  *ngFor="let underelement of understage.elements;" cdkDrag >
+                     <ion-icon [name]="getElementIcon(underelement)"></ion-icon><br>
+                     <div [innerHtml]="getElementContent(underelement)"></div>
+                     <ion-grid>
+                       <ion-row *ngFor="let additional of underelement.additional;let i = index">
+                         <ion-label position="stacked">{{getElementAdditionalLabel(underelement,i)}}</ion-label>
+                         <ion-input class="additional" [value]="additional"></ion-input>
+                       </ion-row>
+                     </ion-grid>
+                   </ion-card>
+                 </ion-col>
+               </ion-row>
+            </ion-card>
+            <ion-card class="cardplus" (click)="addUnderStage(i)">
+              <ion-card-content>
+                <ion-icon [name]="'add'"></ion-icon>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+
 
         <ion-row>
           <ion-col>
