@@ -112,7 +112,11 @@ getElementContent(element: StageElement): SafeHtml {
                   break;
      case 'UCK':
       html = '<ion-input value="'+element.content+'"></ion-input>';
-                                break;
+        break;
+        case 'VAR':
+          // eslint-disable-next-line max-len
+          html = '<ion-select placeholder="Variable" <ion-select-option  *ngFor="let variable of scenario.variables.values; value="variable[0]">> {{variable[0]}} </ion-select-option></ion-select>';
+          break;
   }
 
 return this.sanitizer.bypassSecurityTrustHtml(html);
@@ -131,6 +135,13 @@ getElementIcon(element: StageElement){
 
 addStage(){
   this.scenario.stages.push(new Stage(''));
+}
+addVariable(){
+  this.scenario.variables.values.push(['',0]);
+}
+
+removeVariable(index: number){
+  this.scenario.variables.values.splice(index, 1);
 }
 //#endregion
 
@@ -165,6 +176,7 @@ getTools(){
     "description": "this is a test scenario",
     "copyright": "no",
     "variables": {
+      "values": []
     },
     "stages": [
         {

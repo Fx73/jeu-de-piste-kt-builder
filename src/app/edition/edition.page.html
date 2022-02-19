@@ -44,10 +44,18 @@
         <ion-input [value]="scenario.copyright"></ion-input>
       </ion-item>
       <ion-card-content>
-        Variables used : <br>
-        <div *ngFor="let variable of scenario.variables.values;">
-          {{variable[0]}}
-        </div>
+        <ion-grid class="variablegrid">
+          <ion-row>
+            <ion-col size="5">Variables {{scenario.variables.values?.length}} </ion-col>
+            <ion-col><ion-button size="small" expand="block" fill="outline" color="dark" (click)="addVariable()">Add</ion-button> </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let variable of scenario.variables.values;let i = index">
+            <ion-col><ion-input class="varinput" [value]="variable[0]" size="1" placeholder="Name"></ion-input></ion-col>
+            <ion-col><ion-input class="varinput" [value]="variable[1]" size="1" placeholder="Value"></ion-input></ion-col>
+            <ion-col size="2"><ion-button size="small" expand="block" fill="outline" color="dark" (click)="removeVariable(i)">-</ion-button> </ion-col>
+          </ion-row>
+        </ion-grid>
+
       </ion-card-content>
     </ion-card>
 

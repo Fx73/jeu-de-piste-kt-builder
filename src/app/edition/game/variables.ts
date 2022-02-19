@@ -5,8 +5,9 @@
  */
 
 export class Variables{
-
-  public values: [string, number][] = Array();
+  constructor(
+    public values: [string, number][] = Array()
+  ){}
 
 
 }
