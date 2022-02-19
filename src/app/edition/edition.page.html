@@ -85,9 +85,13 @@
           <ion-col id="{{i}}" class="droplist" size="12" cdkDropList (cdkDropListDropped)="elementMove($event)">
             <ion-card class="elementcard"  *ngFor="let element of stage.elements;" cdkDrag >
               <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
-              <ion-input name="Content" [value]="element.content"></ion-input>
-              <ion-label *ngIf="element.additional?.length" name="Additional" position="stacked"></ion-label>
-              <ion-input  *ngIf="element.additional?.length" [value]="element.additional"></ion-input>
+              <div [innerHtml]="getElementContent(element)"></div>
+              <ion-grid>
+                <ion-row *ngFor="let additional of element.additional;let i = index">
+                  <ion-label position="stacked">{{getElementAdditionalLabel(element,i)}}</ion-label>
+                  <ion-input class="additional" [value]="additional"></ion-input>
+                </ion-row>
+              </ion-grid>
             </ion-card>
           </ion-col>
         </ion-row>

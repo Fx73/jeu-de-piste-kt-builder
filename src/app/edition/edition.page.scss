@@ -1,3 +1,9 @@
+$font-path: "../assets/fonts";
+@font-face {
+font-family: RobotoFont;
+src: url("../../assets/fonts/Roboto-Regular.ttf");
+}
+
 ion-menu-button {
   color: var(--ion-color-primary);
 }
@@ -63,14 +69,29 @@ ion-menu-button {
 
 .elementcard{
   cursor: move;
-  align-items: center;
-  text-align: center;
+  padding: 0.2em;
+  border-radius: 8px;
+  background-color: rgb(240, 240, 240);
 
 }
 
 .elementcard>ion-icon{
-  font-size: 1.8rem;
+  font-size: 1.2rem;
 }
+.elementcard>div{
+  color: rgb(40, 40, 40) ;
+  font-variant: small-caps;
+  padding: 0em;
+  margin: 0em;
+}
+
+.additional{
+  color: rgb(40, 40, 40) ;
+  font-variant: small-caps;
+  padding: 0em;
+  margin: 0em;
+}
+
 
 
 .cdk-drag-preview {
