@@ -15,9 +15,11 @@
 
 
 <ion-content [fullscreen]="true" [scrollX]="true">
-  <ion-row cdkDropListGroup>
+  <ion-grid class="cardgrid">
+  <ion-row class="cardrow" cdkDropListGroup>
 
     <!-- Card Title -->
+    <ion-col>
     <ion-card class="cardtitle">
       <ion-item>
         <ion-label position="stacked">Title</ion-label>
@@ -59,9 +61,11 @@
 
       </ion-card-content>
     </ion-card>
+  </ion-col>
 
     <!-- Cards Game -->
-    <ion-card *ngFor="let stage of scenario.stages;let i = index">
+    <ion-col *ngFor="let stage of scenario.stages;let i = index">
+    <ion-card class="cardgame">
       <ion-grid>
 
         <ion-row class="ion-no-padding">
@@ -94,7 +98,7 @@
               </ion-grid>
             </ion-card>
           </ion-col>
-        </ion-row>
+        </ion-row><br>
 
         <ion-row>
           <ion-label>&nbsp; UnderStages :</ion-label>
@@ -124,13 +128,13 @@
                  </ion-col>
                </ion-row>
             </ion-card>
-            <ion-card class="cardplus" (click)="addUnderStage(i)">
+            <ion-card class="cardplussmall" (click)="addUnderStage(i)">
               <ion-card-content>
                 <ion-icon [name]="'add'"></ion-icon>
               </ion-card-content>
             </ion-card>
           </ion-col>
-        </ion-row>
+        </ion-row><br>
 
 
         <ion-row>
@@ -142,14 +146,18 @@
 
       </ion-grid>
     </ion-card>
+  </ion-col>
 
 
     <!-- Cards Plus -->
+    <ion-col>
     <ion-card class="cardplus" (click)="addStage()">
       <ion-card-content>
         <ion-icon [name]="'add'"></ion-icon>
       </ion-card-content>
     </ion-card>
+  </ion-col>
 
   </ion-row>
+</ion-grid>
 </ion-content>
