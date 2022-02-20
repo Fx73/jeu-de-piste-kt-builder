@@ -1,14 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start" cdkDropList [cdkDropListData]="" cdkDropListOrientation="horizontal"
-      (cdkDropListDropped)="dropTool($event)" cdkDropListSortingDisabled>
+    <ion-buttons slot="start" cdkDropList [cdkDropListData]="" cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropTool($event)" cdkDropListSortingDisabled>
+      <ion-card class="toolcard" #recyclebin>
+        <ion-icon class="recycle" [name]="'trash'"></ion-icon>
+      </ion-card>
       <ion-card class="toolcard" cdkDrag *ngFor="let tool of getTools();">
         <ion-label position="stacked">{{tool.name}}</ion-label><br>
         <ion-icon [name]="tool.icon"></ion-icon>
       </ion-card>
 
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
 
@@ -61,9 +62,6 @@
 
     <!-- Cards Game -->
     <ion-card *ngFor="let stage of scenario.stages;let i = index">
-      <!--div class="stage-placeholder" [ngStyle]="{'min-height.px':placeholdersize  }" *cdkDragPlaceholder>
-      <ion-label class="labelposition">{{placeholderindex}}</ion-label>
-    </div-->
       <ion-grid>
 
         <ion-row class="ion-no-padding">
@@ -80,18 +78,12 @@
           <ion-col size="1">
             <ion-icon class="ion-no-padding"name="caret-forward" (click)="stageMove(i,i+1)"></ion-icon>
           </ion-col>
-          <!--div class="stage-handle">
-        <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
-          <path d="M0 0h24v24H0z" fill="none"></path>
-        </svg>
-      </div-->
         </ion-row>
 
         <ion-row>
          <ion-label>&nbsp; Content :</ion-label>
-          <ion-col id="{{i}}" class="droplist" size="12" cdkDropList (cdkDropListDropped)="elementMove($event)">
-            <ion-card class="elementcard"  *ngFor="let element of stage.elements;" cdkDrag >
+          <ion-col id="{{i}}" class="droplist" size="12" cdkDropList>
+            <ion-card class="elementcard"  *ngFor="let element of stage.elements;" cdkDrag (cdkDragDropped)="elementMove($event)">
               <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
               <div [innerHtml]="getElementContent(element)"></div>
               <ion-grid>
@@ -118,8 +110,8 @@
               </ion-row>
               <ion-row>
                 <ion-label>&nbsp; Content :</ion-label>
-                 <ion-col id="{{k}}" class="droplist" size="12" cdkDropList (cdkDropListDropped)="underelementMove($event,i)">
-                   <ion-card class="elementcard"  *ngFor="let underelement of understage.elements;" cdkDrag >
+                 <ion-col id="{{k}}" class="droplist" size="12" cdkDropList>
+                   <ion-card class="elementcard"  *ngFor="let underelement of understage.elements;" cdkDrag (cdkDragDropped)="underelementMove($event,i)">
                      <ion-icon [name]="getElementIcon(underelement)"></ion-icon><br>
                      <div [innerHtml]="getElementContent(underelement)"></div>
                      <ion-grid>

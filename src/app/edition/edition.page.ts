@@ -1,5 +1,5 @@
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import {CdkDragDrop, moveItemInArray, Point, transferArrayItem} from '@angular/cdk/drag-drop';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { StageElement, TYPE } from './game/element/stage_element';
 
@@ -26,6 +26,7 @@ export class EditionPage implements OnInit {
     {name:'Unlock', icon: 'lock-open', type : TYPE[TYPE.UCK]},
     {name:'Variable', icon: 'reorder-four', type : TYPE[TYPE.VAR]},
   ];
+  @ViewChild('recyclebin', { read: ElementRef }) binview: ElementRef;
 
   public edition: string;
   public scenario: Scenario;
@@ -46,18 +47,14 @@ export class EditionPage implements OnInit {
 
     this.loadScenarionFromJson(this.jsonScenario);
     console.log(this.scenario);
+
+
   }
 
 
 
 
   dropTool(event: CdkDragDrop<string[]>){
-
-  }
-
-
-
-  cdkDragMoved(event: any){
     console.log(event);
   }
 
@@ -75,6 +72,11 @@ elementMove(event: CdkDragDrop<string[]>) {
   const indexFrom: number = event.previousIndex;
   const indexTo: number = event.currentIndex;
 
+  if(this.isInRecycleBin(event.dropPoint)){
+    this.scenario.stages[stageFrom].elements.splice(indexFrom, 1);
+    return;
+  }
+
   const previousElem: Array<StageElement> = this.scenario.stages[stageFrom].elements;
   const nextElem: Array<StageElement> = this.scenario.stages[stageTo].elements;
 
@@ -88,15 +90,24 @@ underelementMove(event: CdkDragDrop<string[]>, stageid: number) {
   const indexFrom: number = event.previousIndex;
   const indexTo: number = event.currentIndex;
 
+  if(this.isInRecycleBin(event.dropPoint)){
+    this.scenario.stages[stageid].understages[stageFrom].elements.splice(indexFrom, 1);
+    return;
+  }
+
+
   const previousElem: Array<StageElement> = this.scenario.stages[stageid].understages[stageFrom].elements;
   const nextElem: Array<StageElement> = this.scenario.stages[stageid].understages[stageTo].elements;
 
   const elem: StageElement= previousElem.splice(indexFrom,1)[0];
   nextElem.splice(indexTo,0,elem);
 }
-//#endregion
 
-//region UI
+isInRecycleBin(elempos: Point): boolean{
+  const rect = this.binview.nativeElement.getBoundingClientRect();
+  return (elempos.x >= rect.left && elempos.x <= rect.right) && (elempos.y >= rect.top && elempos.y <= rect.bottom);
+}
+
 getElementContent(element: StageElement): SafeHtml {
   let html: string;
   switch(element.type.toString()){
@@ -157,6 +168,7 @@ addUnderStage(stageindex: number){
   }
   this.scenario.stages[stageindex].understages?.push(new Stage(''));
 }
+
 addVariable(){
   this.scenario.variables.values.push(['',0]);
 }
