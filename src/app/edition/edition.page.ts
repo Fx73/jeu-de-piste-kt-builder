@@ -26,7 +26,8 @@ export class EditionPage implements OnInit {
     {name:'Unlock', icon: 'lock-open', type : TYPE[TYPE.UCK]},
     {name:'Variable', icon: 'reorder-four', type : TYPE[TYPE.VAR]},
   ];
-  @ViewChild('recyclebin', { read: ElementRef }) binview: ElementRef;
+  @ViewChild('recyclebin', { read: ElementRef }) recyclebin: ElementRef;
+  @ViewChild('gamecontainer', { read: ElementRef }) gamecontainer: ElementRef;
 
   public edition: string;
   public scenario: Scenario;
@@ -48,14 +49,59 @@ export class EditionPage implements OnInit {
     this.loadScenarionFromJson(this.jsonScenario);
     console.log(this.scenario);
 
-
   }
 
 
 
 
   dropTool(event: CdkDragDrop<string[]>){
-    console.log(event);
+    const x = event.dropPoint.x;
+    const y = event.dropPoint.y;
+    const elemtype: TYPE= TYPE[event.item.element.nativeElement.id];
+
+    //Find the card
+    const columns: HTMLCollection= this.gamecontainer.nativeElement.children;
+    let index;
+    let card;
+    for (let i = 1; i < columns.length - 1; i++) {
+      const c = columns.item(i).children.item(0);
+      const rect = c.getBoundingClientRect();
+      if(rect.left<=x && rect.right>=x){
+        index = i-1;
+        card = c;
+      }
+    }
+    if(index == null || card == null ){return;}
+
+    //Find the content
+    let content: HTMLElement = card.querySelector('#gamecontent');
+    if(content?.getBoundingClientRect().top<=y && content?.getBoundingClientRect().bottom>=y){
+      this.scenario.stages[index].elements.push(new StageElement( elemtype,''));
+      return;
+    }
+
+    //Find the understage
+    content = card.querySelector('#gameunderstage');
+    if(content?.getBoundingClientRect().top<=y && content?.getBoundingClientRect().bottom>=y){
+      const lines: NodeListOf<HTMLElement>= content.querySelectorAll('#gameundercard');
+      let underindex;
+      let undercard;
+      for (let j = 0; j < lines.length; j++) {
+        const rect = lines.item(j).getBoundingClientRect();
+        if(rect.top<=y && rect.bottom>=y)
+        {
+          underindex = j;
+          undercard = lines.item(j);
+        }
+      }
+      if(underindex == null || undercard == null){return;}
+      this.scenario.stages[index].understages[underindex].elements.push(new StageElement( elemtype,''));
+
+
+
+      return;
+    }
+
   }
 
 
@@ -104,7 +150,7 @@ underelementMove(event: CdkDragDrop<string[]>, stageid: number) {
 }
 
 isInRecycleBin(elempos: Point): boolean{
-  const rect = this.binview.nativeElement.getBoundingClientRect();
+  const rect = this.recyclebin.nativeElement.getBoundingClientRect();
   return (elempos.x >= rect.left && elempos.x <= rect.right) && (elempos.y >= rect.top && elempos.y <= rect.bottom);
 }
 
