@@ -19,42 +19,48 @@
   <ion-row class="cardrow" cdkDropListGroup #gamecontainer>
 
     <!-- Card Title -->
-    <ion-col>
-    <ion-card class="cardtitle">
+    <ion-col >
+    <ion-card class="cardtitle" (ionChange)="applyChangeScenario($event)">
       <ion-item>
         <ion-label position="stacked">Title</ion-label>
-        <ion-input [value]="scenario.title"></ion-input>
+        <ion-input id="title" [value]="getScenario().title"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="stacked">Creator</ion-label>
-        <ion-input [value]="scenario.creator"></ion-input>
+        <ion-input id="creator" [value]="getScenario().creator"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="stacked">Image</ion-label>
-        <br>
-        <ion-button color="medium" fill="outline">
-          <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+        <ion-label position="stacked">Icon</ion-label> <br>
+        <ion-img [src]="getScenario().icon"></ion-img>
+        <ion-button color="medium" fill="outline" (click)="pickImage(-1,-1,-1)">
+          <ion-icon id="gameicon" slot="icon-only" name="cloud-upload"></ion-icon>
         </ion-button>
 
       </ion-item>
       <ion-item>
         <ion-label position="stacked">Description</ion-label>
-        <ion-textarea [value]="scenario.description"></ion-textarea>
+        <ion-textarea id="description" [value]="getScenario().description"></ion-textarea>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Copyright</ion-label>
-        <ion-input [value]="scenario.copyright"></ion-input>
+        <ion-input id="copyright" [value]="getScenario().copyright"></ion-input>
       </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Version</ion-label>
+        <ion-input id="version" [value]="getScenario().version" readonly></ion-input>
+      </ion-item>
+
       <ion-card-content>
         <ion-grid class="variablegrid">
           <ion-row>
-            <ion-col size="5">Variables {{scenario.variables.values?.length}} </ion-col>
+            <ion-col size="5">Variables {{getScenario().variables.values?.length}} </ion-col>
             <ion-col><ion-button size="small" expand="block" fill="outline" color="dark" (click)="addVariable()">Add</ion-button> </ion-col>
           </ion-row>
-          <ion-row *ngFor="let variable of scenario.variables.values;let i = index">
-            <ion-col><ion-input class="varinput" [value]="variable[0]" size="1" placeholder="Name"></ion-input></ion-col>
-            <ion-col><ion-input class="varinput" [value]="variable[1]" size="1" placeholder="Value"></ion-input></ion-col>
+          <ion-row *ngFor="let variable of getScenario().variables.values;let i = index">
+            <ion-col><ion-input id="gamevarname{{i}}" class="varinput" [value]="variable[0]" size="1" placeholder="Name"></ion-input></ion-col>
+            <ion-col><ion-input id="gamevarvalue{{i}}" class="varinput" [value]="variable[1]" size="1" placeholder="Value"></ion-input></ion-col>
             <ion-col size="2"><ion-button size="small" expand="block" fill="outline" color="dark" (click)="removeVariable(i)">-</ion-button> </ion-col>
           </ion-row>
         </ion-grid>
@@ -64,14 +70,14 @@
   </ion-col>
 
     <!-- Cards Game -->
-    <ion-col *ngFor="let stage of scenario.stages;let i = index">
-    <ion-card class="cardgame">
+    <ion-col *ngFor="let stage of getScenario().stages;let i = index">
+    <ion-card class="cardgame" (ionChange)="applyChangeStage($event,i)">
       <ion-grid>
 
         <ion-row class="ion-no-padding">
           <ion-col size="9">
             <ion-label position="stacked">Name</ion-label>
-            <ion-input [value]="stage.name"></ion-input>
+            <ion-input id="name" [value]="stage.name"></ion-input>
           </ion-col>
           <ion-col size="1">
             <ion-icon class="ion-no-padding" name="caret-back" (click)="stageMove(i,i-1)"></ion-icon>
@@ -91,9 +97,9 @@
               <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
               <div [innerHtml]="getElementContent(element)"></div>
               <ion-grid>
-                <ion-row *ngFor="let additional of element.additional;let i = index">
-                  <ion-label position="stacked">{{getElementAdditionalLabel(element,i)}}</ion-label>
-                  <ion-input class="additional" [value]="additional"></ion-input>
+                <ion-row *ngFor="let additional of element.additional;let j = index">
+                  <ion-label position="stacked">{{getElementAdditionalLabel(element,j)}}</ion-label>
+                  <ion-input id="elements[{{j}}].additional" class="additional" [value]="additional"></ion-input>
                 </ion-row>
               </ion-grid>
             </ion-card>
@@ -140,7 +146,7 @@
         <ion-row>
           <ion-col>
             <ion-label position="stacked">Next :</ion-label>
-            <ion-input [value]="stage.next"></ion-input>
+            <ion-input id="next" [value]="stage.next"></ion-input>
           </ion-col>
         </ion-row>
 

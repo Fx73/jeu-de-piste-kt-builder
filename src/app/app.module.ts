@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';

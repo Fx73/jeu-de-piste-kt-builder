@@ -1,9 +1,11 @@
-import {CdkDragDrop, moveItemInArray, Point, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, Point, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { StageElement, TYPE } from './game/element/stage_element';
 
 import { ActivatedRoute } from '@angular/router';
+import { AppComponent } from './../app.component';
+import { Config } from 'src/app.config';
 import { Element } from './game/element/element';
 import { Scenario } from './game/scenario';
 import { Stage } from './game/stage';
@@ -30,8 +32,6 @@ export class EditionPage implements OnInit {
   @ViewChild('gamecontainer', { read: ElementRef }) gamecontainer: ElementRef;
 
   public edition: string;
-  public scenario: Scenario;
-
 
    placeholdersize: number;
    placeholderindex = 0;
@@ -46,14 +46,20 @@ export class EditionPage implements OnInit {
     this.edition = this.activatedRoute.snapshot.paramMap.get('id');
     this.placeholdersize = document.getElementsByClassName('cardtitle').item(0).getBoundingClientRect().width;
 
-    this.loadScenarionFromJson(this.jsonScenario);
-    console.log(this.scenario);
+    if(this.getScenario().version == null){
+      this.getScenario().version =  Config.version;
+    }
 
   }
 
+  public getScenario(): Scenario{
+    return AppComponent.scenario;
+  }
+  print(event: any){
+    console.log(event);
+  }
 
-
-
+//Region Model
   dropTool(event: CdkDragDrop<string[]>){
     const x = event.dropPoint.x;
     const y = event.dropPoint.y;
@@ -76,7 +82,7 @@ export class EditionPage implements OnInit {
     //Find the content
     let content: HTMLElement = card.querySelector('#gamecontent');
     if(content?.getBoundingClientRect().top<=y && content?.getBoundingClientRect().bottom>=y){
-      this.scenario.stages[index].elements.push(new StageElement( elemtype,''));
+      this.getScenario().stages[index].elements.push(new StageElement( elemtype,''));
       return;
     }
 
@@ -95,7 +101,7 @@ export class EditionPage implements OnInit {
         }
       }
       if(underindex == null || undercard == null){return;}
-      this.scenario.stages[index].understages[underindex].elements.push(new StageElement( elemtype,''));
+      this.getScenario().stages[index].understages[underindex].elements.push(new StageElement( elemtype,''));
 
 
 
@@ -105,12 +111,11 @@ export class EditionPage implements OnInit {
   }
 
 
-//Region Model
 stageMove(sender: number,target: any){
-  moveItemInArray(this.scenario.stages,sender,target);
+  moveItemInArray(this.getScenario().stages,sender,target);
 }
 understageMove(sender: number,undersender: number,target: any){
-  moveItemInArray(this.scenario.stages[sender].understages,undersender,target);
+  moveItemInArray(this.getScenario().stages[sender].understages,undersender,target);
 }
 elementMove(event: CdkDragDrop<string[]>) {
   const stageFrom: number = +event.previousContainer.id;
@@ -119,12 +124,12 @@ elementMove(event: CdkDragDrop<string[]>) {
   const indexTo: number = event.currentIndex;
 
   if(this.isInRecycleBin(event.dropPoint)){
-    this.scenario.stages[stageFrom].elements.splice(indexFrom, 1);
+    this.getScenario().stages[stageFrom].elements.splice(indexFrom, 1);
     return;
   }
 
-  const previousElem: Array<StageElement> = this.scenario.stages[stageFrom].elements;
-  const nextElem: Array<StageElement> = this.scenario.stages[stageTo].elements;
+  const previousElem: Array<StageElement> = this.getScenario().stages[stageFrom].elements;
+  const nextElem: Array<StageElement> = this.getScenario().stages[stageTo].elements;
 
   const elem: StageElement= previousElem.splice(indexFrom,1)[0];
   nextElem.splice(indexTo,0,elem);
@@ -137,13 +142,13 @@ underelementMove(event: CdkDragDrop<string[]>, stageid: number) {
   const indexTo: number = event.currentIndex;
 
   if(this.isInRecycleBin(event.dropPoint)){
-    this.scenario.stages[stageid].understages[stageFrom].elements.splice(indexFrom, 1);
+    this.getScenario().stages[stageid].understages[stageFrom].elements.splice(indexFrom, 1);
     return;
   }
 
 
-  const previousElem: Array<StageElement> = this.scenario.stages[stageid].understages[stageFrom].elements;
-  const nextElem: Array<StageElement> = this.scenario.stages[stageid].understages[stageTo].elements;
+  const previousElem: Array<StageElement> = this.getScenario().stages[stageid].understages[stageFrom].elements;
+  const nextElem: Array<StageElement> = this.getScenario().stages[stageid].understages[stageTo].elements;
 
   const elem: StageElement= previousElem.splice(indexFrom,1)[0];
   nextElem.splice(indexTo,0,elem);
@@ -206,21 +211,44 @@ getElementIcon(element: StageElement){
 }
 
 addStage(){
-  this.scenario.stages.push(new Stage(''));
+  this.getScenario().stages.push(new Stage(''));
 }
 addUnderStage(stageindex: number){
-  if(!this.scenario.stages[stageindex].understages){
-    this.scenario.stages[stageindex].understages = new Array();
+  if(!this.getScenario().stages[stageindex].understages){
+    this.getScenario().stages[stageindex].understages = new Array();
   }
-  this.scenario.stages[stageindex].understages?.push(new Stage(''));
+  this.getScenario().stages[stageindex].understages?.push(new Stage(''));
 }
 
 addVariable(){
-  this.scenario.variables.values.push(['',0]);
+  this.getScenario().variables.values.push(['',0]);
 }
 
 removeVariable(index: number){
-  this.scenario.variables.values.splice(index, 1);
+  this.getScenario().variables.values.splice(index, 1);
+}
+
+applyChangeScenario(event: any){
+  const value = event.detail.value;
+  const variable: string = event.target.id;
+
+  if(variable.startsWith('gamevarname')){
+    this.getScenario().variables.values[+variable.charAt(variable.length-1)][0] = value;
+    return;
+  }
+  if(variable.startsWith('gamevarvalue')){
+    this.getScenario().variables.values[+variable.charAt(variable.length-1)][1] = value;
+    return;
+  }
+
+  this.getScenario[variable] = value;
+}
+
+applyChangeStage(event: any, stageid: number){
+  const value = event.detail.value;
+  const variable: string = event.target.id;
+
+  this.getScenario().stages[stageid][variable] = value;
 }
 //#endregion
 
@@ -230,8 +258,22 @@ removeVariable(index: number){
 getTools(){
   return EditionPage.tools;
 }
-  loadScenarionFromJson(json: string){
-    this.scenario = JSON.parse(json);
+
+  pickImage(stage: number, understage: number, pos: number){
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e => {
+      const target: HTMLInputElement = e.target  as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        const reader = new FileReader();
+        reader.readAsDataURL(target.files[0]);
+        reader.onload = (event) => {
+          AppComponent.scenario.icon = event.target.result;
+        };
+      }
+   };
+
+    input.click();
   }
 
   getImage(url: string){
@@ -243,249 +285,6 @@ getTools(){
 
 
 
-
-
-
-//#region test
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  jsonScenario = `
-  {
-    "title": "Complex Scenario Test",
-    "creator": "unitest",
-    "description": "this is a test scenario",
-    "copyright": "no",
-    "variables": {
-      "values": []
-    },
-    "stages": [
-        {
-            "name": "e0",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "This is the test 0 of TXT and IMG",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "IMG",
-                    "content": "e0i0",
-                    "additional": [
-                    ]
-                }
-            ],
-            "next": [
-                "e1"
-            ]
-        },
-        {
-            "name": "e1",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "This is the test 1 of BTN",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "BTN",
-                    "content": "BTN ?",
-                    "additional": [
-                        "u0"
-                    ]
-                }
-            ],
-            "next": [
-                "e2",
-                "e0"
-            ],
-            "understages": [
-                {
-                    "name": "u0",
-                    "elements": [
-                        {
-                            "type": "TXT",
-                            "content": "Test is ok",
-                            "additional": [
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "e2",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "This is the test 2 of EDT",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "EDT",
-                    "content": "Write answer",
-                    "additional": [
-                        "u0",
-                        "response",
-                        "answer"
-                    ]
-                }
-            ],
-            "next": [
-                "e3",
-                "e1"
-            ],
-            "understages": [
-                {
-                    "name": "u0",
-                    "elements": [
-                        {
-                            "type": "TXT",
-                            "content": "Test is ok",
-                            "additional": [
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "e3",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "This is the test 3 of ETP part 1",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "ETP",
-                    "content": "e4",
-                    "additional": [
-                    ]
-                }
-            ],
-            "next": [
-                "e4",
-                "e3"
-            ]
-        },
-        {
-            "name": "e4",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "This is the test 4 of ETP part 2 and TST",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "TST",
-                    "content": "Test ok, should have jumped the 3",
-                    "additional": [
-                    ]
-                }
-            ],
-            "next": [
-                "e5",
-                "e3"
-            ]
-        },
-        {
-            "name": "e5",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "This is the test 5 of VAR and lock",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "LCK",
-                    "content": "e6",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "BTN",
-                    "content": "unlock",
-                    "additional": [
-                        "u0"
-                    ]
-                }
-            ],
-            "next": [
-                "e6",
-                "e4"
-            ],
-            "understages": [
-                {
-                    "name": "u0",
-                    "elements": [
-                        {
-                            "type": "TXT",
-                            "content": "Lock will be released",
-                            "additional": [
-                            ]
-                        },
-                        {
-                            "type": "UCK",
-                            "content": "e6",
-                            "additional": [
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "e6",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "This is the test 6 of QRC",
-                    "additional": [
-                    ]
-                },
-                {
-                    "type": "QRC",
-                    "content": "QRC",
-                    "additional": [
-                    ]
-                }
-            ],
-            "next": [
-                "e100",
-                "e5"
-            ],
-            "understages": [
-                {
-                    "name": "QRC",
-                    "elements": [
-                        {
-                            "type": "TXT",
-                            "content": "Test is ok",
-                            "additional": [
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "e100",
-            "elements": [
-                {
-                    "type": "TXT",
-                    "content": "End of tests",
-                    "additional": [
-                    ]
-                }
-            ]
-        }
-    ]
-  }
-  `;
 }
-//#endregion
+
+
