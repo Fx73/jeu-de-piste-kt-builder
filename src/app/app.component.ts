@@ -4,6 +4,7 @@ import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import { Scenario } from './edition/game/scenario';
+import { file } from 'jszip';
 
 @Component({
   selector: 'app-root',
@@ -84,18 +85,23 @@ export class AppComponent {
     return JSON.stringify(Scenario.getImages());
   }
 
-  zipScenario(json: string){
+  async zipScenario(json: string){
     const zip = new JSZip();
     zip.file('ScenarioFile.json',json);
 
-    const archive = zip.generateAsync({type : 'blob'});
-    archive.then(blob => {
+    for(const [key, value] of Scenario.getImages()){
+      const blob = await this.b64toBlob(value);
+      zip.file(key+'.'+blob.type.split('/')[1],blob);
+    }
+
+    const archive = await zip.generateAsync({type : 'blob'});
+
       const dlink: HTMLAnchorElement = document.createElement('a');
-      dlink.download =Scenario.get().title + '_' + Scenario.get().creator + '.sc';
-      dlink.href =  URL.createObjectURL(blob);
+      dlink.download = Scenario.get().title + '_' + Scenario.get().creator + '.sc';
+      dlink.href =  URL.createObjectURL(archive);
       dlink.click();
       dlink.remove();
-    });
+
   }
 
   unZipScenario(f: File){
@@ -107,6 +113,10 @@ export class AppComponent {
           this.router.navigateByUrl('/Edition/'+ Scenario.get().title);
         });
     });
+  }
+
+  async b64toBlob(b64Data): Promise<Blob>{
+    return fetch(b64Data).then(res => res.blob());
   }
 
 //#endregion

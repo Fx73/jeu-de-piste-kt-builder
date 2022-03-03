@@ -270,6 +270,7 @@ getTools(){
   pickImage(stage: number, understage: number, pos: number){
     const input = document.createElement('input');
     input.type = 'file';
+    input.accept='image/png, image/jpeg,';
     input.onchange = e => {
       const target: HTMLInputElement = e.target  as HTMLInputElement;
       if (target.files && target.files[0]) {
