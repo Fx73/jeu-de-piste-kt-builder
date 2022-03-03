@@ -43,6 +43,8 @@ ion-menu-button {
 .variablegrid{
   align-items: center;
   text-align: center;
+  overflow-y:auto;
+  max-height: 400px;
 }
 .varinput{
   padding: 0em;
@@ -74,6 +76,7 @@ ion-menu-button {
 .cardgame{
   height:86vh;
   width: max-content;
+  overflow-y:scroll;
 }
 .cardplus{
   display: flex;
@@ -158,4 +161,11 @@ ion-menu-button {
 
 ion-img{
   height: 200px;
+}
+::-webkit-scrollbar {
+  width: 1px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #8a4646;
 }

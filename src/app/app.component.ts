@@ -31,18 +31,24 @@ export class AppComponent {
 
   newFile(){
     Scenario.set(new Scenario('','','',''));
+    this.loadScenarionFromJson(this.jsonScenario);
     this.router.navigateByUrl('/Edition/new');
 
   }
 
   openFile(){
-    this.loadScenarionFromJson(this.jsonScenario);
+    const s = localStorage.getItem('currentScenario');
+    const a = localStorage.getItem('currentImages');
+    this.loadScenarionFromJson(s);
+    this.loadImagesFromJson(a);
+    this.router.navigateByUrl('/Edition/new'+Scenario.get().title);
     }
 
   saveFile(){
-    console.log('Save');
-    const json = this.saveScenarioInJson();
-    console.log(json);
+    localStorage.setItem('currentScenario', this.saveScenarioInJson());
+    localStorage.setItem('currentImages', this.saveImagesInJson());
+
+    console.log(this.saveScenarioInJson());
   }
 
   exportFile(){
@@ -64,11 +70,18 @@ export class AppComponent {
 
 //#region utilities
   loadScenarionFromJson(json: string){
-    Scenario.set(JSON.parse(json));
+    const s = Object.assign(new Scenario('','','',''),JSON.parse(json));
+    Scenario.set(s);
   }
-
+  loadImagesFromJson(json: string){
+    const i = Object.assign(new Map<string,string | ArrayBuffer> (),JSON.parse(json));
+    Scenario.setImages(i);
+  }
   saveScenarioInJson(): string{
     return JSON.stringify(Scenario.get());
+  }
+  saveImagesInJson(): string{
+    return JSON.stringify(Scenario.getImages());
   }
 
   zipScenario(json: string){

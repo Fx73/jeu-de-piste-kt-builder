@@ -1,7 +1,7 @@
 /* eslint-disable curly */
 
 import {CdkDragDrop, Point, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { StageElement, TYPE } from './game/element/stage_element';
 
@@ -242,33 +242,27 @@ removeVariable(index: number){
   this.getScenario().variables.values.splice(index, 1);
 }
 
-applyChangeScenario(event: any){
+changeVariable(event: any){
   const value = event.detail.value;
   const variable: string = event.target.id;
 
   if(variable.startsWith('gamevarname')){
     this.getScenario().variables.values[+variable.charAt(variable.length-1)][0] = value;
-    return;
   }
   if(variable.startsWith('gamevarvalue')){
     this.getScenario().variables.values[+variable.charAt(variable.length-1)][1] = value;
-    return;
   }
 
-  this.getScenario[variable] = value;
 }
 
-applyChangeStage(event: any, stageid: number){
-  const value = event.detail.value;
-  const variable: string = event.target.id;
-
-  this.getScenario().stages[stageid][variable] = value;
-}
 //#endregion
 
 
 //#region Utilities
 
+trackByIdx(index: number, obj: any): any {
+  return index;
+}
 getTools(){
   return EditionPage.tools;
 }

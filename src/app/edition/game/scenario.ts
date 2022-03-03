@@ -49,6 +49,13 @@ constructor(
     this.images.delete(name);
   }
 
+  public static getImages():  Map<string,string | ArrayBuffer>{
+    return this.images;
+  }
+  public static setImages(map: Map<string,string | ArrayBuffer>){
+    this.images = map;
+  }
+
   public static setCurrentVersion(){
       this.instance.version = Config.version;
 
