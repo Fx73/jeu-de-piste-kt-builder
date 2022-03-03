@@ -1,3 +1,5 @@
+/* eslint-disable curly */
+
 import {CdkDragDrop, Point, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -53,7 +55,10 @@ export class EditionPage implements OnInit {
   }
 
   public getScenario(): Scenario{
-    return AppComponent.scenario;
+    return Scenario.get();
+  }
+  public getImage(name: string): string | ArrayBuffer{
+    return Scenario.getImage(name);
   }
   print(event: any){
     console.log(event);
@@ -79,7 +84,7 @@ export class EditionPage implements OnInit {
     }
     if(index == null || card == null ){return;}
 
-    //Find the content
+    //Find the stage
     let content: HTMLElement = card.querySelector('#gamecontent');
     if(content?.getBoundingClientRect().top<=y && content?.getBoundingClientRect().bottom>=y){
       this.getScenario().stages[index].elements.push(new StageElement( elemtype,''));
@@ -123,6 +128,7 @@ elementMove(event: CdkDragDrop<string[]>) {
   const indexFrom: number = event.previousIndex;
   const indexTo: number = event.currentIndex;
 
+
   if(this.isInRecycleBin(event.dropPoint)){
     this.getScenario().stages[stageFrom].elements.splice(indexFrom, 1);
     return;
@@ -133,6 +139,7 @@ elementMove(event: CdkDragDrop<string[]>) {
 
   const elem: StageElement= previousElem.splice(indexFrom,1)[0];
   nextElem.splice(indexTo,0,elem);
+
 }
 
 underelementMove(event: CdkDragDrop<string[]>, stageid: number) {
@@ -140,6 +147,7 @@ underelementMove(event: CdkDragDrop<string[]>, stageid: number) {
   const stageTo: number = +event.container.id;
   const indexFrom: number = event.previousIndex;
   const indexTo: number = event.currentIndex;
+
 
   if(this.isInRecycleBin(event.dropPoint)){
     this.getScenario().stages[stageid].understages[stageFrom].elements.splice(indexFrom, 1);
@@ -152,6 +160,7 @@ underelementMove(event: CdkDragDrop<string[]>, stageid: number) {
 
   const elem: StageElement= previousElem.splice(indexFrom,1)[0];
   nextElem.splice(indexTo,0,elem);
+
 }
 
 isInRecycleBin(elempos: Point): boolean{
@@ -159,46 +168,51 @@ isInRecycleBin(elempos: Point): boolean{
   return (elempos.x >= rect.left && elempos.x <= rect.right) && (elempos.y >= rect.top && elempos.y <= rect.bottom);
 }
 
-getElementContent(element: StageElement): SafeHtml {
-  let html: string;
+ionInputVisible(element: StageElement): string {
   switch(element.type.toString()){
     case 'TXT':
-      html = '<ion-input value="'+element.content+'"></ion-input>';
-      break;
-    case 'IMG':
-        html = '<ion-img src="'+this.getImage(element.content)+'"></ion-img>';
-      break;
-    case 'BTN':
-      html = '<ion-button color="medium" expand="block">'+element.content+'</ion-button>';
-          break;
-    case 'EDT':
-      html = '<ion-input placeholder="_____________________________________________________________" class="edt"></ion-input>'+
-      '<ion-button color="medium" expand="block">'+element.content+'</ion-button>';
-            break;
     case 'ETP':
-      html = '<ion-input value="'+element.content+'"> -> Jump to step :</ion-input>';
-      break;
-    case 'TST':
-      html ='<ion-card></ion-item><ion-input value="'+element.content+'"></ion-input></ion-card>';
-              break;
     case 'QRC':
-      html = '<ion-input value="'+element.content+'"></ion-input>';
-                break;
     case 'LCK':
-      html = '<ion-input value="'+element.content+'"></ion-input>';
-                  break;
-     case 'UCK':
-      html = '<ion-input value="'+element.content+'"></ion-input>';
-        break;
-        case 'VAR':
-          // eslint-disable-next-line max-len
-          html = '<ion-select placeholder="Variable" <ion-select-option  *ngFor="let variable of scenario.variables.values; value="variable[0]">> {{variable[0]}} </ion-select-option></ion-select>';
-          break;
+    case 'UCK':
+      return '';
+    default:
+      return 'display:none';
   }
-
-return this.sanitizer.bypassSecurityTrustHtml(html);
 }
-
+ionInputExplaination(element: StageElement): string {
+  switch(element.type.toString()){
+    case 'ETP':
+      return ' -> Jump to step :';
+    default:
+      return '';
+  }
+}
+ionImageVisible(element: StageElement): string {
+  switch(element.type.toString()){
+    case 'IMG':
+      return '';
+    default:
+      return 'display:none';
+  }
+}
+ionButtonVisible(element: StageElement): string {
+  switch(element.type.toString()){
+    case 'EDT':
+    case 'BTN':
+      return '';
+    default:
+      return 'display:none';
+  }
+}
+ionInputPlaceHolderVisible(element: StageElement): string {
+  switch(element.type.toString()){
+    case 'EDT':
+      return '';
+    default:
+      return 'display:none';
+  }
+}
 getElementAdditionalLabel(element: StageElement, index: number){
   const getlabelfun = element.type.toString().toLowerCase() + 'AdditionalLabels';
   const label: string = Element[getlabelfun]()[index];
@@ -268,7 +282,13 @@ getTools(){
         const reader = new FileReader();
         reader.readAsDataURL(target.files[0]);
         reader.onload = (event) => {
-          AppComponent.scenario.icon = event.target.result;
+          if(stage === -1){
+            Scenario.setImage('ScenarioIcon',event.target.result);
+          }else{
+            Scenario.setImage(this.hashCode(event.target.result.toString()).toString(),event.target.result);
+            this.getScenario().stages[stage].elements[pos].content = this.hashCode(event.target.result.toString()).toString();
+
+          }
         };
       }
    };
@@ -276,10 +296,18 @@ getTools(){
     input.click();
   }
 
-  getImage(url: string){
-    return 'assets/icon/favicon.png';
-  }
-
+  hashCode(obj: string): number {
+    let hash = 0; let i; let chr;
+    if (obj.length === 0) return hash;
+    for (i = 0; i < obj.length; i++) {
+      chr   = obj.charCodeAt(i);
+      // eslint-disable-next-line no-bitwise
+      hash  = ((hash << 5) - hash) + chr;
+      // eslint-disable-next-line no-bitwise
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  };
 //#endregion
 
 

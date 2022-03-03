@@ -31,7 +31,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="stacked">Icon</ion-label> <br>
-        <ion-img [src]="getScenario().icon"></ion-img>
+        <ion-img [src]="getImage('ScenarioIcon')"></ion-img>
         <ion-button color="medium" fill="outline" (click)="pickImage(-1,-1,-1)">
           <ion-icon id="gameicon" slot="icon-only" name="cloud-upload"></ion-icon>
         </ion-button>
@@ -93,10 +93,20 @@
         <ion-row id="gamecontent">
          <ion-label>&nbsp; Content :</ion-label>
           <ion-col id="{{i}}" class="droplist" size="12" cdkDropList>
-            <ion-card class="elementcard"  *ngFor="let element of stage.elements;" cdkDrag (cdkDragDropped)="elementMove($event)">
+            <ion-card class="elementcard"  *ngFor="let element of stage.elements;let j = index" cdkDrag (cdkDragDropped)="elementMove($event)">
               <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
-              <div [innerHtml]="getElementContent(element)"></div>
-              <ion-grid>
+              <div>
+                <ion-input [style]="ionInputVisible(element)" [value]="element.content"></ion-input>
+                <ion-input  [style]="ionInputPlaceHolderVisible(element)" placeholder="_____________________________________________________________" class="edt"></ion-input>
+                <ion-img   [style]="ionImageVisible(element)" [src]="this.getImage(element.content)"></ion-img>
+                <ion-button size="small" [style]="ionImageVisible(element)" color="medium" fill="outline" (click)="pickImage(i,-1,j)">
+                  <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+                </ion-button>
+                <ion-button [style]="ionButtonVisible(element)" color="medium" expand="block">{{element.content}}</ion-button>
+                <ion-select [style]="element.type.toString() === 'VAR' ? '' : 'display:none'" placeholder="Variable"> <ion-select-option  *ngFor="let variable of getScenario().variables.values;"> {{variable[0]}} </ion-select-option></ion-select>
+                <ion-card [style]="element.type.toString() === 'TST' ? '' : 'display:none'"><ion-input [value]="element.content"></ion-input></ion-card>
+              </div>
+               <ion-grid>
                 <ion-row *ngFor="let additional of element.additional;let j = index">
                   <ion-label position="stacked">{{getElementAdditionalLabel(element,j)}}</ion-label>
                   <ion-input id="elements[{{j}}].additional" class="additional" [value]="additional"></ion-input>
@@ -121,9 +131,18 @@
               <ion-row>
                 <ion-label>&nbsp; Content :</ion-label>
                  <ion-col id="{{k}}" class="droplist" size="12" cdkDropList>
-                   <ion-card class="elementcard"  *ngFor="let underelement of understage.elements;" cdkDrag (cdkDragDropped)="underelementMove($event,i)">
+                   <ion-card class="elementcard"  *ngFor="let underelement of understage.elements;let j = index" cdkDrag (cdkDragDropped)="underelementMove($event,i)">
                      <ion-icon [name]="getElementIcon(underelement)"></ion-icon><br>
-                     <div [innerHtml]="getElementContent(underelement)"></div>
+                     <div>
+                      <ion-input [style]="ionInputVisible(underelement)" [value]="underelement.content"></ion-input>
+                      <ion-input  [style]="ionInputPlaceHolderVisible(underelement)" placeholder="_____________________________________________________________" class="edt"></ion-input>
+                      <ion-img   [style]="ionImageVisible(underelement)" [src]="this.getImage(underelement.content)"></ion-img>
+                      <ion-button size="small" [style]="ionImageVisible(underelement)" color="medium" fill="outline" (click)="pickImage(i,k,j)">
+                        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+                      </ion-button>
+                      <ion-button [style]="ionButtonVisible(underelement)" color="medium" expand="block">{{underelement.content}}</ion-button>
+                      <ion-select [style]="underelement.type.toString() === 'VAR' ? '' : 'display:none'" placeholder="Variable"> <ion-select-option  *ngFor="let variable of getScenario().variables.values;"> {{variable[0]}} </ion-select-option></ion-select>
+                     </div>
                      <ion-grid>
                        <ion-row *ngFor="let additional of underelement.additional;let i = index">
                          <ion-label position="stacked">{{getElementAdditionalLabel(underelement,i)}}</ion-label>

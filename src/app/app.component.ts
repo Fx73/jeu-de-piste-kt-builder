@@ -11,7 +11,6 @@ import { Scenario } from './edition/game/scenario';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public static scenario: Scenario;
 
   public menuItems = [
     { title: 'New', method: this.newFile, icon: 'add' },
@@ -31,7 +30,7 @@ export class AppComponent {
 
 
   newFile(){
-    AppComponent.scenario = new Scenario('','','','');
+    Scenario.set(new Scenario('','','',''));
     this.router.navigateByUrl('/Edition/new');
 
   }
@@ -47,7 +46,7 @@ export class AppComponent {
   }
 
   exportFile(){
-    if(AppComponent.scenario == null){return;}
+    if(Scenario.get() == null){return;}
 
     const json = this.saveScenarioInJson();
     this.zipScenario(json);
@@ -65,11 +64,11 @@ export class AppComponent {
 
 //#region utilities
   loadScenarionFromJson(json: string){
-    AppComponent.scenario = JSON.parse(json);
+    Scenario.set(JSON.parse(json));
   }
 
   saveScenarioInJson(): string{
-    return JSON.stringify(AppComponent.scenario);
+    return JSON.stringify(Scenario.get());
   }
 
   zipScenario(json: string){
@@ -79,7 +78,7 @@ export class AppComponent {
     const archive = zip.generateAsync({type : 'blob'});
     archive.then(blob => {
       const dlink: HTMLAnchorElement = document.createElement('a');
-      dlink.download = AppComponent.scenario.title + '_' + AppComponent.scenario.creator + '.sc';
+      dlink.download =Scenario.get().title + '_' + Scenario.get().creator + '.sc';
       dlink.href =  URL.createObjectURL(blob);
       dlink.click();
       dlink.remove();
@@ -92,7 +91,7 @@ export class AppComponent {
     archive.then(z=>{
       z.file('ScenarioFile.json').async('string').then(json=>{
           this.loadScenarionFromJson(json);
-          this.router.navigateByUrl('/Edition/'+ AppComponent.scenario.title);
+          this.router.navigateByUrl('/Edition/'+ Scenario.get().title);
         });
     });
   }
