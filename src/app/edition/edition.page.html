@@ -104,7 +104,13 @@
                   <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
                 </ion-button>
                 <ion-button [style]="ionButtonVisible(element)" color="medium" expand="block"><ion-input [(ngModel)]="element.content"></ion-input></ion-button>
-                <ion-select [style]="element.type.toString() === 'VAR' ? '' : 'display:none'" placeholder="Variable"> <ion-select-option  *ngFor="let variable of getScenario().variables.values;"> {{variable[0]}} </ion-select-option></ion-select>
+                <div [style]="element.type.toString() === 'VAR' ? '' : 'display:none'">
+                  <ion-row>
+                    <ion-col><ion-select  placeholder="Variable"> <ion-select-option  *ngFor="let variable of getScenario().variables.values;" [(ngModel)]="element.content"> </ion-select-option></ion-select></ion-col>
+                    <!--ion-col size="2"><ion-select> <ion-select-option  *ngFor="let item of operators;" [(ngModel)]="element.additional[0]"> {{item}} </ion-select-option></ion-select></ion-col-->
+                    <!--ion-col size="3"><ion-input type="number" inputmode="numeric" [(ngModel)]="element.additional[1]" ></ion-input></ion-col-->
+                  </ion-row>
+                </div>
                 <ion-card [style]="element.type.toString() === 'TST' ? '' : 'display:none'"><ion-input [(ngModel)]="element.content"></ion-input></ion-card>
               </div>
                <ion-grid>

@@ -30,10 +30,12 @@ export class EditionPage implements OnInit {
     {name:'Unlock', icon: 'lock-open', type : TYPE[TYPE.UCK]},
     {name:'Variable', icon: 'reorder-four', type : TYPE[TYPE.VAR]},
   ];
+
   @ViewChild('recyclebin', { read: ElementRef }) recyclebin: ElementRef;
   @ViewChild('gamecontainer', { read: ElementRef }) gamecontainer: ElementRef;
 
   public edition: string;
+  public operators = ['=','+=','-=','*=','/='];
 
    placeholdersize: number;
    placeholderindex = 0;
@@ -254,6 +256,7 @@ changeVariable(event: any){
   }
 
 }
+
 
 //#endregion
 

@@ -102,7 +102,9 @@
 /**
  * VAR: Instantiate a variables
  *
- * @param content : variables content : "var=value"
+ * @param content : variable name
+ * @param additional 1 : operator
+ * @param additional 2 : value
  */
  public static varAdditionalLabels(): string[]{
   return [];
