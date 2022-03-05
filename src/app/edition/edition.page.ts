@@ -215,9 +215,9 @@ ionInputPlaceHolderVisible(element: StageElement): string {
       return 'display:none';
   }
 }
-getElementAdditionalLabel(element: StageElement, index: number){
+getElementAdditionalLabel(element: StageElement){
   const getlabelfun = element.type.toString().toLowerCase() + 'AdditionalLabels';
-  const label: string = Element[getlabelfun]()[index];
+  const label: string = Element[getlabelfun]();
   return label;
 }
 

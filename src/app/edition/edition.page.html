@@ -114,9 +114,9 @@
                 <ion-card [style]="element.type.toString() === 'TST' ? '' : 'display:none'"><ion-input [(ngModel)]="element.content"></ion-input></ion-card>
               </div>
                <ion-grid>
-                <ion-row *ngFor="let additional of element.additional;let j = index;trackBy:trackByIdx">
-                  <ion-label position="stacked">{{getElementAdditionalLabel(element,j)}}</ion-label>
-                  <ion-input id="elements[{{j}}].additional" class="additional"   [(ngModel)]="element.additional[j]"></ion-input>
+                <ion-row *ngFor="let additional of getElementAdditionalLabel(element);let u = index;trackBy:trackByIdx">
+                  <ion-label position="stacked">{{additional}}</ion-label>
+                  <ion-input id="elements[{{j}}].additional" class="additional"   [(ngModel)]="element.additional[u]"></ion-input>
                 </ion-row>
               </ion-grid>
             </ion-card>
@@ -153,9 +153,9 @@
 
                     </div>
                      <ion-grid>
-                       <ion-row *ngFor="let additional of underelement.additional;let j = index;trackBy:trackByIdx">
-                         <ion-label position="stacked">{{getElementAdditionalLabel(underelement,j)}}</ion-label>
-                         <ion-input class="additional" [(ngModel)]="underelement.additional[j]"></ion-input>
+                       <ion-row *ngFor="let additional of getElementAdditionalLabel(underelement);let u = index;trackBy:trackByIdx">
+                         <ion-label position="stacked">{{additional}}</ion-label>
+                         <ion-input class="additional" [(ngModel)]="underelement.additional[u]"></ion-input>
                        </ion-row>
                      </ion-grid>
                    </ion-card>

@@ -107,6 +107,7 @@
  * @param additional 2 : value
  */
  public static varAdditionalLabels(): string[]{
-  return [];
+  return ['operator:',
+'value'];
 }
  }
