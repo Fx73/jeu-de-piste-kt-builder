@@ -1,6 +1,6 @@
 <h1>Treasure Hunt / Jeu de Piste</h1>
 
-![icon](./resources/icon.png?raw=true)
+![icon](./resources/ic_banner.png?raw=true)
 
 <h2>Presentation</h2>
 
