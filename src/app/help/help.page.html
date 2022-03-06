@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Do you need help ?</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-img src="assets/Help.png"></ion-img>
+
+<ion-card [id]="tool.type" class="toolcard" cdkDrag *ngFor="let tool of getTools();">
+<ion-icon [name]="tool.icon"></ion-icon>
+<ion-label position="stacked"> {{tool.name}}</ion-label><br>
+<ion-card-content>
+  {{getToolHelp(tool.type)}}
+</ion-card-content>
+</ion-card>
+</ion-content>

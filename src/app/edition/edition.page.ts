@@ -20,6 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from './../app.component';
 import { Config } from 'src/app.config';
 import { Element } from './game/element/element';
+import { IonContent } from '@ionic/angular';
 import { Scenario } from './game/scenario';
 import { Stage } from './game/stage';
 
@@ -53,7 +54,6 @@ export class EditionPage implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -363,10 +363,9 @@ export class EditionPage implements OnInit {
   }
 
   onWheel(event: WheelEvent): void {
-    const element: HTMLElement = event.currentTarget as HTMLElement;
-    console.log(event.deltaY);
-    document.querySelector('ion-content').scrollToPoint(event.deltaY,0);
-    element.scrollLeft += event.deltaY;
+    const element: IonContent = event.currentTarget as unknown as IonContent;
+    element.getScrollElement().then(scroll=>{scroll.scrollLeft += event.deltaY;});
+
     event.preventDefault();
  }
   //#endregion

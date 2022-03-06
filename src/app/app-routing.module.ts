@@ -11,7 +11,12 @@ const routes: Routes = [
   {
     path: 'Edition/:id',
     loadChildren: () => import('./edition/edition.module').then( m => m.EditionPageModule)
+  },
+  {
+    path: 'Help',
+    loadChildren: () => import('./Help/help.module').then( m => m.HelpPageModule)
   }
+
 ];
 
 @NgModule({

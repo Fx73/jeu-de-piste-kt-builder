@@ -106,7 +106,7 @@
             </ion-row>
 
             <ion-row id="gamecontent">
-              <ion-label>&nbsp; Content :</ion-label>
+              <ion-label>&nbsp; Stage content:</ion-label>
               <ion-col id="{{i}}" class="droplist" size="12" cdkDropList>
                 <ion-card class="elementcard" *ngFor="let element of stage.elements;let j = index" cdkDrag
                   (cdkDragDropped)="elementMove($event)">

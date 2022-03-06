@@ -19,7 +19,7 @@ export class AppComponent {
     { title: 'Export', method: this.exportFile, icon: 'archive' },
     { title: 'Import', method: this.importFile, icon: 'download' },
     { title: 'Account', method: '/Account', icon: 'heart' },
-    { title: 'Help', method: '/Help', icon: 'information-circle' },
+    { title: 'Help', method: this.help, icon: 'information-circle' },
 
   ];
 
@@ -29,6 +29,7 @@ export class AppComponent {
     ) {}
 
 
+    //#region menu items
   newFile(){
     Scenario.set(new Scenario('','','',''));
     this.router.navigateByUrl('/Edition/new');
@@ -66,6 +67,11 @@ export class AppComponent {
 
     input.click();
   }
+
+  help(){
+    this.router.navigate(['/Help']);
+  }
+  //#endregion
 
 //#region utilities
   loadScenarionFromJson(json: string){
