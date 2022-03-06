@@ -361,5 +361,13 @@ export class EditionPage implements OnInit {
     }
     return hash;
   }
+
+  onWheel(event: WheelEvent): void {
+    const element: HTMLElement = event.currentTarget as HTMLElement;
+    console.log(event.deltaY);
+    document.querySelector('ion-content').scrollToPoint(event.deltaY,0);
+    element.scrollLeft += event.deltaY;
+    event.preventDefault();
+ }
   //#endregion
 }

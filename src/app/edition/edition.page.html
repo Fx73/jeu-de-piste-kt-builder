@@ -15,7 +15,7 @@
 </ion-header>
 
 
-<ion-content [fullscreen]="true" [scrollX]="true">
+<ion-content [fullscreen]="true" [scrollX]="true" (wheel)="onWheel($event)">
   <ion-grid class="cardgrid">
     <ion-row class="cardrow" cdkDropListGroup #gamecontainer>
 
