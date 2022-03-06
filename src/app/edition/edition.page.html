@@ -4,7 +4,8 @@
       <ion-card class="toolcard" #recyclebin>
         <ion-icon class="recycle" [name]="'trash'"></ion-icon>
       </ion-card>
-      <ion-card [id]="tool.type" class="toolcard" cdkDrag *ngFor="let tool of getTools();" (cdkDragDropped)="dropTool($event)">
+      <ion-card [id]="tool.type" class="toolcard" cdkDrag *ngFor="let tool of getTools();"
+        (cdkDragDropped)="dropTool($event)">
         <ion-label position="stacked">{{tool.name}}</ion-label><br>
         <ion-icon [name]="tool.icon"></ion-icon>
       </ion-card>
@@ -16,182 +17,230 @@
 
 <ion-content [fullscreen]="true" [scrollX]="true">
   <ion-grid class="cardgrid">
-  <ion-row class="cardrow" cdkDropListGroup #gamecontainer>
+    <ion-row class="cardrow" cdkDropListGroup #gamecontainer>
 
-    <!-- Card Title -->
-    <ion-col >
-    <ion-card class="cardtitle">
-      <ion-item>
-        <ion-label position="stacked">Title</ion-label>
-        <ion-input id="title" [(ngModel)]="getScenario().title"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Creator</ion-label>
-        <ion-input id="creator" [(ngModel)]="getScenario().creator"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Icon</ion-label> <br>
-        <ion-img [src]="getImage('ScenarioIcon')"></ion-img>
-        <ion-button color="medium" fill="outline" (click)="pickImage(-1,-1,-1)">
-          <ion-icon id="gameicon" slot="icon-only" name="cloud-upload"></ion-icon>
-        </ion-button>
+      <!-- Card Title -->
+      <ion-col>
+        <ion-card class="cardtitle">
+          <ion-item>
+            <ion-label position="stacked">Title</ion-label>
+            <ion-input id="title" [(ngModel)]="getScenario().title"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Creator</ion-label>
+            <ion-input id="creator" [(ngModel)]="getScenario().creator"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Icon</ion-label> <br>
+            <ion-img [src]="getImage('ScenarioIcon')"></ion-img>
+            <ion-button color="medium" fill="outline" (click)="pickImage(-1,-1,-1)">
+              <ion-icon id="gameicon" slot="icon-only" name="cloud-upload"></ion-icon>
+            </ion-button>
 
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Description</ion-label>
-        <ion-textarea id="description" [(ngModel)]="getScenario().description"></ion-textarea>
-      </ion-item>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Description</ion-label>
+            <ion-textarea id="description" [(ngModel)]="getScenario().description"></ion-textarea>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Copyright</ion-label>
-        <ion-input id="copyright" [(ngModel)]="getScenario().copyright"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Copyright</ion-label>
+            <ion-input id="copyright" [(ngModel)]="getScenario().copyright"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Version</ion-label>
-        <ion-input id="version" [(ngModel)]="getScenario().version" readonly></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Version</ion-label>
+            <ion-input id="version" [(ngModel)]="getScenario().version" readonly></ion-input>
+          </ion-item>
 
-      <ion-card-content (ionChange)="changeVariable($event)">
-        <ion-row>
-          <ion-col size="5">Variables {{getScenario().variables.values?.length}} </ion-col>
-          <ion-col><ion-button size="small" expand="block" fill="outline" color="dark" (click)="addVariable()">Add</ion-button> </ion-col>
-        </ion-row>
-        <ion-grid class="variablegrid" >
-
-          <ion-row *ngFor="let variable of getScenario().variables.values;let i = index">
-            <ion-col><ion-input id="gamevarname{{i}}" class="varinput" [value]="variable[0]" size="1" placeholder="Name"></ion-input></ion-col>
-            <ion-col><ion-input id="gamevarvalue{{i}}" class="varinput" [value]="variable[1]" size="1" placeholder="Value"></ion-input></ion-col>
-            <ion-col size="2"><ion-button size="small" expand="block" fill="outline" color="dark" (click)="removeVariable(i)">-</ion-button> </ion-col>
-          </ion-row>
-        </ion-grid>
-
-      </ion-card-content>
-    </ion-card>
-  </ion-col>
-
-    <!-- Cards Game -->
-    <ion-col *ngFor="let stage of getScenario().stages;let i = index">
-    <ion-card class="cardgame">
-      <ion-grid>
-
-        <ion-row class="ion-no-padding">
-          <ion-col size="9">
-            <ion-label position="stacked">Name</ion-label>
-            <ion-input id="name" [(ngModel)]="stage.name"></ion-input>
-          </ion-col>
-          <ion-col size="1">
-            <ion-icon class="ion-no-padding" name="caret-back" (click)="stageMove(i,i-1)"></ion-icon>
-          </ion-col>
-          <ion-col size="1">
-            <ion-input class="ion-no-padding" #inputpos [value]="i" inputmode="numeric" min="0" (ionBlur)="stageMove(i,inputpos.value)" (keyup.enter)="stageMove(i,inputpos.value)"></ion-input>
-          </ion-col>
-          <ion-col size="1">
-            <ion-icon class="ion-no-padding"name="caret-forward" (click)="stageMove(i,i+1)"></ion-icon>
-          </ion-col>
-        </ion-row>
-
-        <ion-row id="gamecontent">
-         <ion-label>&nbsp; Content :</ion-label>
-          <ion-col id="{{i}}" class="droplist" size="12" cdkDropList>
-            <ion-card class="elementcard"  *ngFor="let element of stage.elements;let j = index" cdkDrag (cdkDragDropped)="elementMove($event)">
-              <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
-              <div>
-                <ion-input [style]="ionInputVisible(element)" [(ngModel)]="element.content"></ion-input>
-                <ion-input  [style]="ionInputPlaceHolderVisible(element)" placeholder="_____________________________________________________________" class="edt"></ion-input>
-                <ion-img   [style]="ionImageVisible(element)" [src]="this.getImage(element.content)"></ion-img>
-                <ion-button size="small" [style]="ionImageVisible(element)" color="medium" fill="outline" (click)="pickImage(i,-1,j)">
-                  <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+          <ion-card-content (ionChange)="changeVariable($event)">
+            <ion-row>
+              <ion-col size="5">Variables {{getScenario().variables.values?.length}} </ion-col>
+              <ion-col>
+                <ion-button size="small" expand="block" fill="outline" color="dark" (click)="addVariable()">Add
                 </ion-button>
-                <ion-button [style]="ionButtonVisible(element)" color="medium" expand="block"><ion-input [(ngModel)]="element.content"></ion-input></ion-button>
-                <div [style]="element.type.toString() === 'VAR' ? '' : 'display:none'">
-                  <ion-row>
-                    <ion-col><ion-select  placeholder="Variable"> <ion-select-option  *ngFor="let variable of getScenario().variables.values;" [(ngModel)]="element.content"> </ion-select-option></ion-select></ion-col>
-                    <!--ion-col size="2"><ion-select> <ion-select-option  *ngFor="let item of operators;" [(ngModel)]="element.additional[0]"> {{item}} </ion-select-option></ion-select></ion-col-->
-                    <!--ion-col size="3"><ion-input type="number" inputmode="numeric" [(ngModel)]="element.additional[1]" ></ion-input></ion-col-->
-                  </ion-row>
-                </div>
-                <ion-card [style]="element.type.toString() === 'TST' ? '' : 'display:none'"><ion-input [(ngModel)]="element.content"></ion-input></ion-card>
-              </div>
-               <ion-grid>
-                <ion-row *ngFor="let additional of getElementAdditionalLabel(element);let u = index;trackBy:trackByIdx">
-                  <ion-label position="stacked">{{additional}}</ion-label>
-                  <ion-input id="elements[{{j}}].additional" class="additional"   [(ngModel)]="element.additional[u]"></ion-input>
-                </ion-row>
-              </ion-grid>
-            </ion-card>
-          </ion-col>
-        </ion-row><br>
+              </ion-col>
+            </ion-row>
+            <ion-grid class="variablegrid">
 
-        <ion-row id="gameunderstage">
-          <ion-label>&nbsp; UnderStages :</ion-label>
-          <ion-col id="{{i}}" class="droplist" size="12">
-            <ion-card id="gameundercard" class="elementcard"  *ngFor="let understage of stage.understages;let k = index" >
-              <ion-row class="ion-no-padding">
-                <ion-col size="11">
-                  <ion-input [(ngModel)]="understage.name">Name : </ion-input>
+              <ion-row *ngFor="let variable of getScenario().variables.values;let i = index">
+                <ion-col>
+                  <ion-input id="gamevarname{{i}}" class="varinput" [value]="variable[0]" size="1" placeholder="Name">
+                  </ion-input>
                 </ion-col>
-                <ion-col size="1">
-                  <ion-input class="ion-no-padding" #inputpos [value]="k" type="number" inputmode="numeric" min="0" (change)="understageMove(i,k,inputpos.value)" (keyup.enter)="understageMove(i,k,inputpos.value)"></ion-input>
+                <ion-col>
+                  <ion-input id="gamevarvalue{{i}}" class="varinput" [value]="variable[1]" size="1" placeholder="Value">
+                  </ion-input>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-button size="small" expand="block" fill="outline" color="dark" (click)="removeVariable(i)">-
+                  </ion-button>
                 </ion-col>
               </ion-row>
-              <ion-row>
-                <ion-label>&nbsp; Content :</ion-label>
-                 <ion-col id="{{k}}" class="droplist" size="12" cdkDropList>
-                   <ion-card class="elementcard"  *ngFor="let underelement of understage.elements;let j = index" cdkDrag (cdkDragDropped)="underelementMove($event,i)">
-                     <ion-icon [name]="getElementIcon(underelement)"></ion-icon><br>
-                     <div>
-                      <ion-input [style]="ionInputVisible(underelement)" [(ngModel)]="underelement.content"></ion-input>
-                      <ion-input  [style]="ionInputPlaceHolderVisible(underelement)" placeholder="_____________________________________________________________" class="edt"></ion-input>
-                      <ion-img   [style]="ionImageVisible(underelement)" [src]="this.getImage(underelement.content)"></ion-img>
-                      <ion-button size="small" [style]="ionImageVisible(underelement)" color="medium" fill="outline" (click)="pickImage(i,k,j)">
-                        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-                      </ion-button>
-                      <ion-button [style]="ionButtonVisible(underelement)" color="medium" expand="block">{{underelement.content}}</ion-button>
-                      <ion-select [style]="underelement.type.toString() === 'VAR' ? '' : 'display:none'" placeholder="Variable"> <ion-select-option  *ngFor="let variable of getScenario().variables.values;"> {{variable[0]}} </ion-select-option></ion-select>
-                      <ion-card [style]="underelement.type.toString() === 'TST' ? '' : 'display:none'"><ion-input [(ngModel)]="underelement.content"></ion-input></ion-card>
+            </ion-grid>
 
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Cards Game -->
+      <ion-col *ngFor="let stage of getScenario().stages;let i = index">
+        <ion-card class="cardgame">
+          <ion-grid>
+
+            <ion-row class="ion-no-padding">
+              <ion-col size="9">
+                <ion-label position="stacked">Name</ion-label>
+                <ion-input id="name" [(ngModel)]="stage.name" (ionChange)="updateStageName($event)"></ion-input>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon class="ion-no-padding" name="caret-back" (click)="stageMove(i,i-1)"></ion-icon>
+              </ion-col>
+              <ion-col size="1">
+                <ion-input class="ion-no-padding" #inputpos [value]="i" inputmode="numeric" min="0"
+                  (ionBlur)="stageMove(i,inputpos.value)" (keyup.enter)="stageMove(i,inputpos.value)"></ion-input>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon class="ion-no-padding" name="caret-forward" (click)="stageMove(i,i+1)"></ion-icon>
+              </ion-col>
+            </ion-row>
+
+            <ion-row id="gamecontent">
+              <ion-label>&nbsp; Content :</ion-label>
+              <ion-col id="{{i}}" class="droplist" size="12" cdkDropList>
+                <ion-card class="elementcard" *ngFor="let element of stage.elements;let j = index" cdkDrag
+                  (cdkDragDropped)="elementMove($event)">
+                  <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
+                  <div>
+                    <ion-input [style]="ionInputVisible(element)" [(ngModel)]="element.content"></ion-input>
+                    <ion-input [style]="ionInputPlaceHolderVisible(element)"
+                      placeholder="_____________________________________________________________" class="edt">
+                    </ion-input>
+                    <ion-img [style]="ionImageVisible(element)" [src]="this.getImage(element.content)"></ion-img>
+                    <ion-button size="small" [style]="ionImageVisible(element)" color="medium" fill="outline"
+                      (click)="pickImage(i,-1,j)">
+                      <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+                    </ion-button>
+                    <ion-button [style]="ionButtonVisible(element)" color="medium" expand="block">
+                      <ion-input [(ngModel)]="element.content"></ion-input>
+                    </ion-button>
+                    <div [style]="element.type.toString() === 'VAR' ? '' : 'display:none'">
+                      <ion-row>
+                        <ion-col>
+                          <ion-select placeholder="Variable">
+                            <ion-select-option *ngFor="let variable of getScenario().variables.values;"
+                              [(ngModel)]="element.content" [value]="variable[0]"> {{variable[0]}} </ion-select-option>
+                          </ion-select>
+                        </ion-col>
+                        <!--ion-col size="2"><ion-select> <ion-select-option  *ngFor="let item of operators;" [(ngModel)]="element.additional[0]"> {{item}} </ion-select-option></ion-select></ion-col-->
+                        <!--ion-col size="3"><ion-input type="number" inputmode="numeric" [(ngModel)]="element.additional[1]" ></ion-input></ion-col-->
+                      </ion-row>
                     </div>
-                     <ion-grid>
-                       <ion-row *ngFor="let additional of getElementAdditionalLabel(underelement);let u = index;trackBy:trackByIdx">
-                         <ion-label position="stacked">{{additional}}</ion-label>
-                         <ion-input class="additional" [(ngModel)]="underelement.additional[u]"></ion-input>
-                       </ion-row>
-                     </ion-grid>
-                   </ion-card>
-                 </ion-col>
-               </ion-row>
-            </ion-card>
-            <ion-card class="cardplussmall" (click)="addUnderStage(i)">
-              <ion-card-content>
-                <ion-icon [name]="'add'"></ion-icon>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row><br>
+                    <ion-card [style]="element.type.toString() === 'TST' ? '' : 'display:none'">
+                      <ion-input [(ngModel)]="element.content"></ion-input>
+                    </ion-card>
+                  </div>
+                  <ion-grid>
+                    <ion-row
+                      *ngFor="let additional of getElementAdditionalLabel(element);let u = index;trackBy:trackByIdx">
+                      <ion-label position="stacked">{{additional}}</ion-label>
+                      <ion-input id="elements[{{j}}].additional" class="additional" [(ngModel)]="element.additional[u]">
+                      </ion-input>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card>
+              </ion-col>
+            </ion-row><br>
+
+            <ion-row id="gameunderstage">
+              <ion-label>&nbsp; UnderStages :</ion-label>
+              <ion-col id="{{i}}" class="droplist" size="12">
+                <ion-card id="gameundercard" class="elementcard"
+                  *ngFor="let understage of stage.understages;let k = index">
+                  <ion-row class="ion-no-padding">
+                    <ion-col size="11">
+                      <ion-input [(ngModel)]="understage.name">Name : </ion-input>
+                    </ion-col>
+                    <ion-col size="1">
+                      <ion-input class="ion-no-padding" #inputpos [value]="k" type="number" inputmode="numeric" min="0"
+                        (change)="understageMove(i,k,inputpos.value)"
+                        (keyup.enter)="understageMove(i,k,inputpos.value)"></ion-input>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-label>&nbsp; Content :</ion-label>
+                    <ion-col id="{{k}}" class="droplist" size="12" cdkDropList>
+                      <ion-card class="elementcard" *ngFor="let underelement of understage.elements;let j = index"
+                        cdkDrag (cdkDragDropped)="underelementMove($event,i)">
+                        <ion-icon [name]="getElementIcon(underelement)"></ion-icon><br>
+                        <div>
+                          <ion-input [style]="ionInputVisible(underelement)" [(ngModel)]="underelement.content">
+                          </ion-input>
+                          <ion-input [style]="ionInputPlaceHolderVisible(underelement)"
+                            placeholder="_____________________________________________________________" class="edt">
+                          </ion-input>
+                          <ion-img [style]="ionImageVisible(underelement)" [src]="this.getImage(underelement.content)">
+                          </ion-img>
+                          <ion-button size="small" [style]="ionImageVisible(underelement)" color="medium" fill="outline"
+                            (click)="pickImage(i,k,j)">
+                            <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+                          </ion-button>
+                          <ion-button [style]="ionButtonVisible(underelement)" color="medium" expand="block">
+                            {{underelement.content}}</ion-button>
+                          <ion-select [style]="underelement.type.toString() === 'VAR' ? '' : 'display:none'"
+                            placeholder="Variable">
+                            <ion-select-option *ngFor="let variable of getScenario().variables.values;" [value]="variable[0]"> {{variable[0]}}
+                            </ion-select-option>
+                          </ion-select>
+                          <ion-card [style]="underelement.type.toString() === 'TST' ? '' : 'display:none'">
+                            <ion-input [(ngModel)]="underelement.content"></ion-input>
+                          </ion-card>
+
+                        </div>
+                        <ion-grid>
+                          <ion-row
+                            *ngFor="let additional of getElementAdditionalLabel(underelement);let u = index;trackBy:trackByIdx">
+                            <ion-label position="stacked">{{additional}}</ion-label>
+                            <ion-input class="additional" [(ngModel)]="underelement.additional[u]"></ion-input>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-card>
+                    </ion-col>
+                  </ion-row>
+                </ion-card>
+
+                <ion-card class="cardplussmall" (click)="addUnderStage(i)">
+                  <ion-card-content>
+                    <ion-icon [name]="'add'"></ion-icon>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row><br>
 
 
-        <ion-row>
-          <ion-col>
-            <ion-label position="stacked">Next :</ion-label>
-            <ion-input id="next" [value]="stage.next"></ion-input>
-          </ion-col>
-        </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-label position="stacked">Next :</ion-label>
+                <ion-select multiple="true" placeholder="Stage" [(ngModel)]="getScenario().stages[i].next" >
+                  <ion-select-option *ngFor="let stage of getScenario().stages;" [value]="stage.name"> {{stage.name}} </ion-select-option>
+                </ion-select>
+              </ion-col>
+            </ion-row>
 
-      </ion-grid>
-    </ion-card>
-  </ion-col>
+          </ion-grid>
+        </ion-card>
+      </ion-col>
 
 
-    <!-- Cards Plus -->
-    <ion-col>
-    <ion-card class="cardplus" (click)="addStage()">
-      <ion-card-content>
-        <ion-icon [name]="'add'"></ion-icon>
-      </ion-card-content>
-    </ion-card>
-  </ion-col>
+      <!-- Cards Plus -->
+      <ion-col>
+        <ion-card class="cardplus" (click)="addStage()">
+          <ion-card-content>
+            <ion-icon [name]="'add'"></ion-icon>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-  </ion-row>
-</ion-grid>
+    </ion-row>
+  </ion-grid>
 </ion-content>
