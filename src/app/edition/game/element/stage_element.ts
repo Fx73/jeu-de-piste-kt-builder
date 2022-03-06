@@ -8,7 +8,7 @@ import { EditionPage } from './../../edition.page';
 
 export enum TYPE{
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    IMG='IMG', TXT='TXT', QRC='QRC', VAR='VAR', BTN='BTN', EDT='EDT', ETP='ETP', LCK='LCK', UCK='UCK', TST='TST'
+    IMG='IMG', TXT='TXT', QRC='QRC', VAR='VAR', BTN='BTN', EDT='EDT', ETP='ETP', LCK='LCK', UCK='UCK', TST='TST', MAP='MAP'
 }
 
 export class StageElement{

@@ -110,4 +110,17 @@
   return ['operator:',
 'value'];
 }
+
+/**
+ * MAP: Instantiate a map
+ *
+ * @param content : message to display
+ * @param additional 1 : longitude
+ * @param additional 2 : latitude
+ */
+ public static mapAdditionalLabels(): string[]{
+  return ['latitude','longitude:'
+];
+}
+
  }
