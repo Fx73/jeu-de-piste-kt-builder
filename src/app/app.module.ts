@@ -5,7 +5,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { NgModule } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
@@ -14,8 +13,8 @@ import { RouteReuseStrategy } from '@angular/router';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, DragDropModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },Chooser],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
-  exports: [Chooser]
+  exports: []
 })
 export class AppModule {}

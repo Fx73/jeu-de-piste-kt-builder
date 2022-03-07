@@ -1,6 +1,5 @@
 import * as JSZip from 'jszip';
 
-import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import { Scenario } from './edition/game/scenario';
@@ -24,7 +23,6 @@ export class AppComponent {
   ];
 
   constructor(
-    private chooser: Chooser,
     private router: Router
     ) {}
 
