@@ -9,8 +9,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
-  },
+    "e2e": "ng e2e",
+    "ionic-build-prod": "ionic build --prod",
+    "ng-build-prod": "ng build --configuration production"
+    },
   "private": true,
   "dependencies": {
     "@angular/cdk": "^13.2.2",
