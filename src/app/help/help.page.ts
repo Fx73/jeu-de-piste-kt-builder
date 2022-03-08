@@ -8,6 +8,7 @@ import { TYPE } from '../edition/game/element/stage_element';
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
 })
+
 export class HelpPage implements OnInit {
 
   constructor() { }

@@ -1,6 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Do you need help ?</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="primary" shape="round" fill="outline" href="https://github.com/Fx73/jeu-de-piste-kt-builder">
+        Submit an new idea or report a bug !<br>
+        Thank you for your help :^)
+      </ion-button>
+      <ion-button color="primary" shape="round" fill="outline" href="mailto:fx73000@yahoo.fr"> Contact me ! <ion-icon name="mail"></ion-icon></ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="secondary">
+      <ion-button color="secondary" shape="round" fill="outline" [routerLink]="['Privacy']" routerDirection="forward">Consult the Privacy Policy</ion-button>
+      <ion-button color="secondary" shape="round" fill="outline" [routerLink]="['Conditions']" routerDirection="forward">Read the terms and conditions</ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -14,17 +27,5 @@
   {{getToolHelp(tool.type)}}
 </ion-card-content>
 </ion-card>
-<ion-card>
-  <ion-row>
-  <ion-col >
-    Want to submit an idea ? Report a bug ?<br>
-  <a href="https://github.com/Fx73/jeu-de-piste-kt-builder"> Go here ! </a> <br>
-  Thanks for your help ! :^)
-</ion-col>
-<ion-col size="1">
-  You can contact me ! <br>
-  <a href="mailto:fx73000@yahoo.fr">   <ion-icon name="mail"></ion-icon> </a>
-</ion-col>
-</ion-row>
-</ion-card>
+
 </ion-content>
