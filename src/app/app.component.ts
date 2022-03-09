@@ -43,16 +43,18 @@ export class AppComponent {
     }
 
   saveFile(){
-    localStorage.setItem('currentScenario', this.saveScenarioInJson());
-    localStorage.setItem('currentImages', this.saveImagesInJson());
+    const s = this.getScenarioInJson();
+    const a = this.getImagesInJson();
+    localStorage.setItem('currentScenario', s);
+    localStorage.setItem('currentImages', a);
 
-    console.log(this.saveScenarioInJson());
+    console.log(this.getScenarioInJson());
   }
 
   exportFile(){
     if(Scenario.get() == null){return;}
 
-    const json = this.saveScenarioInJson();
+    const json = this.getScenarioInJson();
     this.zipScenario(json);
   }
 
@@ -81,14 +83,16 @@ export class AppComponent {
     Scenario.set(s);
   }
   loadImagesFromJson(json: string){
-    const i = Object.assign(new Map<string,string | ArrayBuffer> (),JSON.parse(json));
+    const i: Map<string,string | ArrayBuffer> = JSON.parse(json, this.jsonReviver);
+    //const iObject: Map<string,string | ArrayBuffer> = Object.assign(new Map<string,string | ArrayBuffer> (),i);
+
     Scenario.setImages(i);
   }
-  saveScenarioInJson(): string{
+  getScenarioInJson(): string{
     return JSON.stringify(Scenario.get());
   }
-  saveImagesInJson(): string{
-    return JSON.stringify(Scenario.getImages());
+  getImagesInJson(): string{
+    return JSON.stringify(Scenario.getImages(),this.jsonReplacer);
   }
 
   async zipScenario(json: string){
@@ -123,6 +127,25 @@ export class AppComponent {
 
   async b64toBlob(b64Data): Promise<Blob>{
     return fetch(b64Data).then(res => res.blob());
+  }
+
+  jsonReplacer(key, value) {
+    if(value instanceof Map) {
+      return {
+        dataType: 'Map',
+        value: Array.from(value.entries()), // or with spread: value: [...value]
+      };
+    } else {
+      return value;
+    }
+  }
+  jsonReviver(key, value) {
+    if(typeof value === 'object' && value !== null) {
+      if (value.dataType === 'Map') {
+        return new Map(value.value);
+      }
+    }
+    return value;
   }
 
 //#endregion

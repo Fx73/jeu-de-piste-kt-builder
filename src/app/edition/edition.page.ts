@@ -247,12 +247,14 @@ export class EditionPage implements OnInit {
           if (stage === -1) {
             Scenario.setImage('ScenarioIcon', event.target.result);
           } else {
-            Scenario.setImage(
-              this.hashCode(event.target.result.toString()).toString(),
-              event.target.result
-            );
-            this.getScenario().stages[stage].elements[pos].content =
+            Scenario.setImage(this.hashCode(event.target.result.toString()).toString(), event.target.result);
+            if(understage === -1){
+              this.getScenario().stages[stage].elements[pos].content =
               this.hashCode(event.target.result.toString()).toString();
+            }else{
+              this.getScenario().stages[stage].understages[understage].elements[pos].content =
+              this.hashCode(event.target.result.toString()).toString();
+            }
           }
         };
       }
@@ -279,7 +281,7 @@ export class EditionPage implements OnInit {
   onWheel(event: WheelEvent): void {
     const element: IonContent = event.currentTarget as unknown as IonContent;
     element.getScrollElement().then((scroll) => {
-      scroll.scrollLeft += event.deltaY;
+      scroll.scrollLeft -= event.deltaY;
     });
 
     event.preventDefault();
