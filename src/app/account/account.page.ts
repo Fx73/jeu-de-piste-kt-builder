@@ -1,0 +1,19 @@
+import { Component, OnInit } from '@angular/core';
+
+import { User } from 'firebase/auth';
+
+@Component({
+  selector: 'app-account',
+  templateUrl: './account.page.html',
+  styleUrls: ['./account.page.scss'],
+})
+export class AccountPage implements OnInit {
+
+  constructor() { }
+
+
+
+  ngOnInit() {
+  }
+
+}

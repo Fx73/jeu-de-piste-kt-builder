@@ -1,0 +1,87 @@
+<ion-header mode="ios">
+  <ion-toolbar>
+    <ion-buttons>
+    </ion-buttons>
+    <ion-title>Login / Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+
+    <ion-col size="2">
+      <ion-card>
+        <ion-title>Third-party</ion-title>
+        <ion-card-content>
+          <ion-buttons slot="start">
+            <ion-buttons slot="end">
+              <ion-button color="primary" (click)="loginWithGoogle()">
+                <ion-icon slot="icon-only"  size="large" name="logo-google"></ion-icon>
+              </ion-button>
+              <ion-button color="primary" (click)="loginWithFacebook()">
+                <ion-icon slot="icon-only"  size="large" name="logo-facebook"></ion-icon>
+              </ion-button>
+
+            </ion-buttons>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+
+    <ion-col>
+      <ion-card>
+        <ion-title>Login</ion-title>
+        <ion-card-content>
+          <form [formGroup]="loginForm"
+            (ngSubmit)="loginForm.valid && login(loginForm.controls['email'].value, loginForm.controls['password'].value)"
+            novalidate>
+            <ion-label>Already have an account ?</ion-label><br>
+            <ion-item>
+              <ion-input placeholder="email" formControlName="email"></ion-input>
+              <ion-label color="danger"
+                *ngIf="loginForm.controls['email'].invalid && (loginForm.controls['email'].dirty || loginForm.controls['email'].touched)">
+                Invalid format
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-input type="password" placeholder="password" formControlName="password"></ion-input>
+              <ion-label color="danger"
+                *ngIf="loginForm.controls['password'].invalid && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+                Min length 8
+              </ion-label>
+            </ion-item>
+            <ion-button expand="block" type="submit" [disabled]="!loginForm.valid">Login</ion-button>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+
+    <ion-col>
+      <ion-card>
+        <ion-title>Register</ion-title>
+        <ion-card-content>
+          <form [formGroup]="registerForm"
+            (ngSubmit)="register(registerForm.controls['email'].value, registerForm.controls['password'].value)">
+            <ion-label>Want to create a new account ?</ion-label><br>
+            <ion-item>
+              <ion-input placeholder="email" formControlName="email"></ion-input>
+              <ion-label color="danger"
+                *ngIf="registerForm.controls['email'].invalid && (registerForm.controls['email'].dirty || registerForm.controls['email'].touched)">
+                Invalid format
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-input type="password" placeholder="password" formControlName="password"></ion-input>
+              <ion-label color="danger"
+                *ngIf="registerForm.controls['password'].invalid && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
+                Min length 8
+              </ion-label>
+            </ion-item>
+            <ion-button expand="block" type="submit" [disabled]="!registerForm.valid">Register</ion-button>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+
+  </ion-row>
+</ion-content>

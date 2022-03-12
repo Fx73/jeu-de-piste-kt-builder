@@ -6,7 +6,7 @@
 
 export class Variables{
   constructor(
-    public values: [string, number][] = Array()
+    public values: Map<string, number> = new Map()
   ){}
 
 

@@ -162,27 +162,30 @@ export class EditionPage implements OnInit {
   }
 
   addVariable() {
-    this.getScenario().variables.values.push(['', 0]);
+    this.getScenario().variables.values.set('', 0);
   }
 
-  removeVariable(index: number) {
-    this.getScenario().variables.values.splice(index, 1);
+  removeVariable(name: string) {
+    this.getScenario().variables.values.delete(name);
   }
 
-  changeVariable(event: any) {
-    const value = event.detail.value;
-    const variable: string = event.target.id;
+  changeVariableName(oldname: string, event: any) {
+    const variable: string = event.srcElement.value;
 
-    if (variable.startsWith('gamevarname')) {
-      this.getScenario().variables.values[
-        +variable.charAt(variable.length - 1)
-      ][0] = value;
-    }
-    if (variable.startsWith('gamevarvalue')) {
-      this.getScenario().variables.values[
-        +variable.charAt(variable.length - 1)
-      ][1] = value;
-    }
+    if(this.getScenario().variables.values.has(variable))
+      return;
+
+    const value: number =this.getScenario().variables.values.get(oldname);
+
+    this.getScenario().variables.values.set(variable,value);
+    this.getScenario().variables.values.delete(oldname);
+
+  }
+
+  changeVariableValue(name: string, event: any) {
+    const value: string = event.srcElement.value;
+
+    this.getScenario().variables.values[name] = value;
   }
 
   //#endregion

@@ -1,8 +1,12 @@
 import * as JSZip from 'jszip';
 
+import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
+
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import { Scenario } from './edition/game/scenario';
+import { firebaseConfig } from 'src/app.config';
+import { initializeApp } from 'firebase/app';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +14,8 @@ import { Scenario } from './edition/game/scenario';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  public static user: User;
+
 
   public menuItems = [
     { title: 'New', method: this.newFile, icon: 'add' },
@@ -24,7 +30,9 @@ export class AppComponent {
 
   constructor(
     private router: Router
-    ) {}
+    ) {
+
+    }
 
 
     //#region menu items
@@ -69,7 +77,11 @@ export class AppComponent {
   }
 
   account(){
-
+    if(AppComponent.user){
+      this.router.navigate(['/Account']);
+    }else{
+      this.router.navigate(['/Login']);
+    }
   }
 
   help(){
@@ -79,7 +91,7 @@ export class AppComponent {
 
 //#region utilities
   loadScenarionFromJson(json: string){
-    const s = Object.assign(new Scenario('','','',''),JSON.parse(json));
+    const s: Scenario = Object.assign(new Scenario('','','',''),JSON.parse(json));
     Scenario.set(s);
   }
   loadImagesFromJson(json: string){
