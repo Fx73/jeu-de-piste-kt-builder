@@ -1,9 +1,11 @@
 import * as JSZip from 'jszip';
 
+import { Auth, User, getAuth } from 'firebase/auth';
+
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import { Scenario } from './edition/game/scenario';
-import { User } from 'firebase/auth';
+import { user } from 'firebase-functions/v1/auth';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,7 @@ import { User } from 'firebase/auth';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public static user: User;
+  public static appUser: User;
   private static staticRouter: Router;
 
   private static _document: Document;
@@ -79,7 +81,7 @@ export class AppComponent {
   }
 
   account(){
-    if(AppComponent.user){
+    if(AppComponent.appUser){
       this.router.navigate(['/Account']);
     }else{
       this.router.navigate(['/Login']);
@@ -163,9 +165,13 @@ export class AppComponent {
     return value;
   }
 
+  getUser(): string{
+    return AppComponent.appUser?.displayName ?? AppComponent.appUser?.email;
+  }
+
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  static setUserStatic(user: User){
-    this.user = user;
+  static setUserStatic(appuser: User){
+    this.appUser = appuser;
     this.staticRouter.navigate(['/Home']);
   }
 //#endregion

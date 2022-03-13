@@ -5,20 +5,32 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
 <ion-card>
   <ion-item>
-    <ion-input  name="name" type="text" placeholder="Name" ngModel required></ion-input>
+    <ion-input  name="name" type="text" placeholder="Name" [(ngModel)]="name" required></ion-input>
   </ion-item>
   <ion-item>
-    <ion-input name="email" type="email" placeholder="your@email.com" ngModel required></ion-input>
+    <ion-input name="email" type="email" placeholder="your@email.com" [(ngModel)]="email" required></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-input name="confirm" type="password" placeholder="Password again" ngModel required></ion-input>
-  </ion-item>
+  <ion-button (click)="saveProfile()" expand="block"> Change personal informations </ion-button>
 </ion-card>
+</ion-col>
+<ion-col>
+  <ion-card>
+  <ion-item>
+    <ion-input name="password" type="password" placeholder="Password" [(ngModel)]="this.password" required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input name="confirm" type="password" placeholder="Password again" [(ngModel)]="this.password2" required></ion-input>
+  </ion-item>
+  <ion-button (click)="savePassword()" expand="block"> Change password </ion-button>
+</ion-card>
+</ion-col>
+</ion-row>
+</ion-grid>
 <ion-card>
   <ion-button [color]="emailVerified()?'success':'warning'" (click)="resendEmail()" expand="block" [disabled]="emailVerified()">{{emailVerified()?'Email verified':'Resend verification email'}}</ion-button>
   <ion-button color="tertiary" (click)="logOut()" expand="block"> Log Out </ion-button>
