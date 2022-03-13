@@ -1,9 +1,27 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>account</ion-title>
+    <ion-title>Account Management</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+<ion-card>
+  <ion-item>
+    <ion-input  name="name" type="text" placeholder="Name" ngModel required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input name="email" type="email" placeholder="your@email.com" ngModel required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input name="password" type="password" placeholder="Password" ngModel required></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-input name="confirm" type="password" placeholder="Password again" ngModel required></ion-input>
+  </ion-item>
+</ion-card>
+<ion-card>
+  <ion-button [color]="emailVerified()?'success':'warning'" (click)="resendEmail()" expand="block" [disabled]="emailVerified()">{{emailVerified()?'Email verified':'Resend verification email'}}</ion-button>
+  <ion-button color="tertiary" (click)="logOut()" expand="block"> Log Out </ion-button>
+</ion-card>
 
 </ion-content>

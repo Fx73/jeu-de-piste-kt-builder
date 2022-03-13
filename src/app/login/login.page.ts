@@ -1,4 +1,5 @@
-import { Auth, FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, linkWithPopup, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+// eslint-disable-next-line max-len
+import { Auth, FacebookAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -10,6 +11,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class LoginPage implements OnInit {
 	registerForm: FormGroup;
   loginForm: FormGroup;
+  passwordRecoveryForm: FormGroup;
+
   auth: Auth;
 
   constructor(private fb: FormBuilder) {
@@ -20,6 +23,9 @@ export class LoginPage implements OnInit {
   this.loginForm = this.fb.group({
     email: ['', Validators.compose([Validators.required, Validators.email])],
     password: ['', Validators.compose([Validators.required, Validators.minLength(8)])],
+});
+this.passwordRecoveryForm = this.fb.group({
+  email: ['', Validators.compose([Validators.required, Validators.email])],
 });
 }
   ngOnInit() {
@@ -63,6 +69,15 @@ export class LoginPage implements OnInit {
       const errorMessage = error.message;
       alert(errorCode);
     });
+}
+
+passwordRecovery(email: string): void {
+  sendPasswordResetEmail(this.auth, email)
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorCode);
+  });
 }
 
 }

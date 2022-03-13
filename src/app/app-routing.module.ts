@@ -5,8 +5,12 @@ import { NgModule } from '@angular/core';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'Edition',
+    redirectTo: '',
     pathMatch: 'full'
+  },
+  {
+    path: 'Home',
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
     path: 'Edition/:id',
@@ -24,6 +28,7 @@ const routes: Routes = [
     path: 'Login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   }
+
 
 
 

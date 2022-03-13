@@ -1,12 +1,9 @@
 import * as JSZip from 'jszip';
 
-import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
-
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import { Scenario } from './edition/game/scenario';
-import { firebaseConfig } from 'src/app.config';
-import { initializeApp } from 'firebase/app';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +12,9 @@ import { initializeApp } from 'firebase/app';
 })
 export class AppComponent {
   public static user: User;
+  private static staticRouter: Router;
 
+  private static _document: Document;
 
   public menuItems = [
     { title: 'New', method: this.newFile, icon: 'add' },
@@ -28,11 +27,14 @@ export class AppComponent {
 
   ];
 
-  constructor(
-    private router: Router
-    ) {
 
+  constructor(
+    private router: Router,
+
+    ) {
+      AppComponent.staticRouter = router;
     }
+
 
 
     //#region menu items
@@ -90,6 +92,7 @@ export class AppComponent {
   //#endregion
 
 //#region utilities
+
   loadScenarionFromJson(json: string){
     const s: Scenario = Object.assign(new Scenario('','','',''),JSON.parse(json));
     Scenario.set(s);
@@ -160,6 +163,11 @@ export class AppComponent {
     return value;
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  static setUserStatic(user: User){
+    this.user = user;
+    this.staticRouter.navigate(['/Home']);
+  }
 //#endregion
 
 
