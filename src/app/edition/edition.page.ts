@@ -1,8 +1,9 @@
 /* eslint-disable curly */
 
 import { CdkDragDrop, Point, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { StageElement, TYPE } from './game/element/stage_element';
+import { getImagesInJson, getScenarioInJson } from '../app.serialization';
 
 import { ActivatedRoute } from '@angular/router';
 import { Config } from 'src/app.config';
@@ -10,13 +11,15 @@ import { Element } from './game/element/element';
 import { IonContent } from '@ionic/angular';
 import { Scenario } from './game/scenario';
 import { Stage } from './game/stage';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { interval } from 'rxjs/internal/observable/interval';
 
 @Component({
   selector: 'app-edition',
   templateUrl: './edition.page.html',
   styleUrls: ['./edition.page.scss'],
 })
-export class EditionPage implements OnInit {
+export class EditionPage implements OnInit, OnDestroy {
   public static tools = [
     { name: 'Texte', icon: 'document-text', type: TYPE[TYPE.TXT] },
     { name: 'Image', icon: 'image', type: TYPE[TYPE.IMG] },
@@ -33,6 +36,8 @@ export class EditionPage implements OnInit {
 
   @ViewChild('recyclebin', { read: ElementRef }) recyclebin: ElementRef;
   @ViewChild('gamecontainer', { read: ElementRef }) gamecontainer: ElementRef;
+
+  subscription: Subscription;
 
   public edition: string;
   public operators = ['=', '+=', '-=', '*=', '/='];
@@ -52,6 +57,11 @@ export class EditionPage implements OnInit {
     if (this.getScenario().version == null) {
       this.getScenario().version = Config.version;
     }
+    this.subscription = interval(10000).subscribe(() => this.saveLocally());
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   //#region getter/setter
@@ -361,5 +371,12 @@ export class EditionPage implements OnInit {
     );
   }
 
+  saveLocally(){
+    const s = getScenarioInJson(Scenario.get());
+    const a = getImagesInJson(Scenario.getImages());
+    localStorage.setItem('currentScenario', s);
+    localStorage.setItem('currentImages', a);
+    localStorage.setItem('currentImageIcon', Scenario.getImage('ScenarioIcon').toString());
+  }
   //#endregion
 }

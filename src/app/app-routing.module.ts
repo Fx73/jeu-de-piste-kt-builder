@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
+    path: 'Open',
+    loadChildren: () => import('./open-file/open-file.module').then( m => m.OpenFilePageModule)
+  },
+  {
     path: 'Edition/:id',
     loadChildren: () => import('./edition/edition.module').then( m => m.EditionPageModule)
   },
@@ -28,7 +32,6 @@ const routes: Routes = [
     path: 'Login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   }
-
 
 
 

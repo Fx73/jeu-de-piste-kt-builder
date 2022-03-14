@@ -61,5 +61,8 @@ constructor(
 
   }
 
+  public fileName(){
+    return this.title + '_' + this.creator + '.sc';
+  }
 
 }

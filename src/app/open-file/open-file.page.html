@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Open a scenario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <ion-grid>
+<ion-row>
+  <ion-col size="3">
+    <ion-card class="scenariocard" color="secondary" (click)="loadLocalScenario()">
+      <ion-title size="small" color="tertiary">Stored locally</ion-title>
+      <ion-title size="large">{{localDescriptor?.name}}</ion-title>
+      <ion-card-content>
+        <ion-text color="primary">{{localDescriptor?.creator}}</ion-text>
+        <ion-img [src]="localDescriptor?.icon"></ion-img>
+
+        <ion-text>{{localDescriptor?.description}}</ion-text>
+
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+  <ion-col size="3" *ngFor="let sd of databaseDescriptors">
+    <ion-card class="scenariocard" (click)="loadDatabaseScenario(sd)">
+      <ion-title size="large">{{sd.name}}</ion-title>
+      <ion-card-content>
+        <ion-text color="primary">{{sd.creator}}</ion-text>
+        <ion-img  [src]="sd.icon"></ion-img>
+
+        <ion-text>{{sd.description}}</ion-text>
+
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+</ion-row>
+
+  </ion-grid>
+
+</ion-content>
