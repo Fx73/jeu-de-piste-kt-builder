@@ -21,7 +21,7 @@ export class AppComponent {
   private static staticRouter: Router;
 
   public menuItems = [
-    { title: 'New', method: this.newFile, icon: 'add' },
+    { title: 'Scenario', method: this.currentScenario, icon: 'color-palette' },
     { title: 'Open', method: this.openFile, icon: 'folder-open' },
     { title: 'Save', method: this.saveFile, icon: 'save' },
     { title: 'Export', method: this.exportFile, icon: 'archive' },
@@ -45,15 +45,16 @@ export class AppComponent {
 
 
     //#region menu items
-  newFile(){
-    Scenario.set(new Scenario('','','',''));
-    this.router.navigateByUrl('/Edition/new');
-
+  currentScenario(){
+    if(Scenario.get()){
+      this.router.navigateByUrl('/Edition/'+ Scenario.get().title);
+    }else{
+      this.router.navigateByUrl('/Home');
+    }
   }
 
   openFile(){
     this.router.navigateByUrl('/Open');
-    return;
     }
 
   async saveFile(){
@@ -163,7 +164,8 @@ export class AppComponent {
     const archive = zip.loadAsync(blob);
     archive.then(z=>{
       z.file('ScenarioFile.json').async('string').then(json=>{
-          loadScenarionFromJson(json);
+          Scenario.set(loadScenarionFromJson(json));
+          const t = Scenario.get().title;
           this.staticRouter.navigateByUrl('/Edition/'+ Scenario.get().title);
         });
     });

@@ -17,6 +17,10 @@ const routes: Routes = [
     loadChildren: () => import('./open-file/open-file.module').then( m => m.OpenFilePageModule)
   },
   {
+    path: 'Edition',
+    loadChildren: () => import('./edition/edition.module').then( m => m.EditionPageModule)
+  },
+  {
     path: 'Edition/:id',
     loadChildren: () => import('./edition/edition.module').then( m => m.EditionPageModule)
   },

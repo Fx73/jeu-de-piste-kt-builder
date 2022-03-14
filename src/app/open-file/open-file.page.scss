@@ -1,9 +1,21 @@
-.scenariocard{
+.scenariocard {
   cursor: pointer;
   padding: 10px;
 }
 .scenariocard:hover {
   box-shadow: 0 5px 5px -3px rgba(241, 234, 234, 0.2),
-              0 8px 10px 1px rgba(219, 218, 218, 0.14),
-              0 3px 14px 2px rgba(216, 211, 211, 0.12);
-            }
+    0 8px 10px 1px rgba(219, 218, 218, 0.14),
+    0 3px 14px 2px rgba(216, 211, 211, 0.12);
+}
+
+.cardplus {
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  font-size: 3.8rem;
+  border: dashed 2px rgb(53, 53, 53);
+}
+.cardplus ion-icon {
+  font-size: 4rem;
+}

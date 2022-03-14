@@ -37,6 +37,12 @@ export class OpenFilePage implements OnInit {
     this.loadScenarioList();
   }
 
+  newScenario(){
+    Scenario.set(new Scenario('','','',''));
+    Scenario.setImages(new Map());
+    this.router.navigateByUrl('/Edition/new');
+  }
+
   loadScenarioLocal(){
     const json = localStorage.getItem('currentScenario');
     const icon = localStorage.getItem('currentImageIcon');
@@ -84,6 +90,7 @@ export class OpenFilePage implements OnInit {
     const fileRef = ref(AppComponent.storage, AppComponent.appUser.uid + '/' + filename);
     getBlob(fileRef).then((blob)=>{
       AppComponent.unZipScenario(blob);
+
     });
   }
 

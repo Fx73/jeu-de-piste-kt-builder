@@ -39,7 +39,6 @@ export class EditionPage implements OnInit, OnDestroy {
 
   subscription: Subscription;
 
-  public edition: string;
   public operators = ['=', '+=', '-=', '*=', '/='];
 
   placeholdersize: number;
@@ -48,7 +47,6 @@ export class EditionPage implements OnInit, OnDestroy {
   constructor(private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
-    this.edition = this.activatedRoute.snapshot.paramMap.get('id');
     this.placeholdersize = document
       .getElementsByClassName('cardtitle')
       .item(0)
@@ -61,6 +59,7 @@ export class EditionPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    Scenario.set(new Scenario('','','',''));
     this.subscription.unsubscribe();
   }
 
@@ -372,11 +371,13 @@ export class EditionPage implements OnInit, OnDestroy {
   }
 
   saveLocally(){
+    if(!Scenario.get().title)return;
+
     const s = getScenarioInJson(Scenario.get());
     const a = getImagesInJson(Scenario.getImages());
     localStorage.setItem('currentScenario', s);
     localStorage.setItem('currentImages', a);
-    localStorage.setItem('currentImageIcon', Scenario.getImage('ScenarioIcon').toString());
+    localStorage.setItem('currentImageIcon', Scenario.getImage('ScenarioIcon')?.toString());
   }
   //#endregion
 }
