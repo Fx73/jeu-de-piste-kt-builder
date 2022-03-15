@@ -65,15 +65,18 @@
 
               <ion-row *ngFor="let variable of getScenario().variables.values | keyvalue;let i = index">
                 <ion-col>
-                  <ion-input [id]="variable.key" class="varinput" [value]="variable.key" size="1" placeholder="Name" (ionBlur)="changeVariableName(variable.key,$event)">
+                  <ion-input [id]="variable.key" class="varinput" [value]="variable.key" size="1" placeholder="Name"
+                    (ionBlur)="changeVariableName(variable.key,$event)">
                   </ion-input>
                 </ion-col>
                 <ion-col>
-                  <ion-input [id]="variable.key" class="varinput" [value]="variable.value" size="1" placeholder="Value" (ionBlur)="changeVariableValue(variable.key, $event)">
+                  <ion-input [id]="variable.key" class="varinput" [value]="variable.value" size="1" placeholder="Value"
+                    (ionBlur)="changeVariableValue(variable.key, $event)">
                   </ion-input>
                 </ion-col>
                 <ion-col size="2">
-                  <ion-button size="small" expand="block" fill="outline" color="dark" (click)="removeVariable(variable.key)">-
+                  <ion-button size="small" expand="block" fill="outline" color="dark"
+                    (click)="removeVariable(variable.key)">-
                   </ion-button>
                 </ion-col>
               </ion-row>
@@ -111,6 +114,7 @@
                 <ion-card class="elementcard" *ngFor="let element of stage.elements;let j = index" cdkDrag
                   (cdkDragDropped)="elementMove($event)">
                   <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
+
                   <div>
                     <ion-input [style]="ionInputVisible(element)" [(ngModel)]="element.content"></ion-input>
                     <ion-input [style]="ionInputPlaceHolderVisible(element)"
@@ -124,22 +128,24 @@
                     <ion-button [style]="ionButtonVisible(element)" color="medium" expand="block">
                       <ion-input [(ngModel)]="element.content"></ion-input>
                     </ion-button>
-                    <div [style]="element.type.toString() === 'VAR' ? '' : 'display:none'">
-                      <ion-row>
-                        <ion-col>
-                          <ion-select placeholder="Variable">
-                            <ion-select-option *ngFor="let variable of getScenario().variables.values | keyvalue;"
-                              [(ngModel)]="element.content" [value]="variable.key"> {{variable.key}} </ion-select-option>
-                          </ion-select>
-                        </ion-col>
-                        <!--ion-col size="2"><ion-select> <ion-select-option  *ngFor="let item of operators;" [(ngModel)]="element.additional[0]"> {{item}} </ion-select-option></ion-select></ion-col-->
-                        <!--ion-col size="3"><ion-input type="number" inputmode="numeric" [(ngModel)]="element.additional[1]" ></ion-input></ion-col-->
-                      </ion-row>
-                    </div>
                     <ion-card [style]="element.type.toString() === 'TST' ? '' : 'display:none'">
                       <ion-input [(ngModel)]="element.content"></ion-input>
                     </ion-card>
+
+
+                    <div [style]="element.type.toString() === 'VAR' ? '' : 'display:none'">
+                      <ion-row>
+                        <ion-col>
+                          <ion-select placeholder="Variable" [(ngModel)]="element.content">
+                            <ion-select-option *ngFor="let variable of getScenario().variables.values | keyvalue;"
+                              [value]="variable.key"> {{variable.key}} </ion-select-option>
+                          </ion-select>
+                        </ion-col>
+                      </ion-row>
+                    </div>
+
                   </div>
+
                   <ion-grid>
                     <ion-row
                       *ngFor="let additional of getElementAdditionalLabel(element);let u = index;trackBy:trackByIdx">
@@ -188,8 +194,9 @@
                           <ion-button [style]="ionButtonVisible(underelement)" color="medium" expand="block">
                             {{underelement.content}}</ion-button>
                           <ion-select [style]="underelement.type.toString() === 'VAR' ? '' : 'display:none'"
-                            placeholder="Variable">
-                            <ion-select-option *ngFor="let variable of getScenario().variables.values| keyvalue;" [value]="variable.key"> {{variable.key}
+                            placeholder="Variable" [(ngModel)]="underelement.content">
+                            <ion-select-option *ngFor="let variable of getScenario().variables.values| keyvalue;"
+                              [value]="variable.key"> {{variable.key}
                             </ion-select-option>
                           </ion-select>
                           <ion-card [style]="underelement.type.toString() === 'TST' ? '' : 'display:none'">
@@ -221,8 +228,9 @@
             <ion-row>
               <ion-col>
                 <ion-label position="stacked">Next :</ion-label>
-                <ion-select multiple="true" placeholder="Stage" [(ngModel)]="getScenario().stages[i].next" >
-                  <ion-select-option *ngFor="let stage of getScenario().stages;" [value]="stage.name"> {{stage.name}} </ion-select-option>
+                <ion-select multiple="true" placeholder="Stage" [(ngModel)]="getScenario().stages[i].next">
+                  <ion-select-option *ngFor="let stage of getScenario().stages;" [value]="stage.name"> {{stage.name}}
+                  </ion-select-option>
                 </ion-select>
               </ion-col>
             </ion-row>

@@ -55,7 +55,7 @@ export class EditionPage implements OnInit, OnDestroy {
     if (this.getScenario().version == null) {
       this.getScenario().version = Config.version;
     }
-    this.subscription = interval(10000).subscribe(() => this.saveLocally());
+    this.subscription = interval(4000).subscribe(() => this.saveLocally());
   }
 
   ngOnDestroy() {

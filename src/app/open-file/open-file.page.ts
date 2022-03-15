@@ -34,7 +34,8 @@ export class OpenFilePage implements OnInit {
 
    ngOnInit() {
     this.loadDescriptorLocal();
-    this.loadScenarioList();
+    if(AppComponent.appUser)
+      {this.loadScenarioList();}
   }
 
   newScenario(){
