@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { collection, getDocs, } from 'firebase/firestore';
 import { getBlob, ref } from 'firebase/storage';
-import { loadImagesFromJson, loadScenarionFromJson } from '../app.serialization';
+import { loadImagesFromJson, loadScenarionFromJson, unZipScenario } from '../app.serialization';
 
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
@@ -33,7 +33,7 @@ export class OpenFilePage implements OnInit {
   constructor(private router: Router) { }
 
    ngOnInit() {
-    this.loadScenarioLocal();
+    this.loadDescriptorLocal();
     this.loadScenarioList();
   }
 
@@ -43,7 +43,7 @@ export class OpenFilePage implements OnInit {
     this.router.navigateByUrl('/Edition/new');
   }
 
-  loadScenarioLocal(){
+  loadDescriptorLocal(){
     const json = localStorage.getItem('currentScenario');
     const icon = localStorage.getItem('currentImageIcon');
     if(json){
@@ -89,7 +89,7 @@ export class OpenFilePage implements OnInit {
     const filename = sd.name + '_' + sd.creator + '.sc';
     const fileRef = ref(AppComponent.storage, AppComponent.appUser.uid + '/' + filename);
     getBlob(fileRef).then((blob)=>{
-      AppComponent.unZipScenario(blob);
+      unZipScenario(blob);
 
     });
   }

@@ -6,6 +6,40 @@ import { Scenario } from './edition/game/scenario';
 
 
 
+export async function zipScenario(json: string, images: Map<string,string | ArrayBuffer>): Promise<Blob>{
+  const zip = new JSZip();
+  zip.file('ScenarioFile.json',json);
+
+  for(const [key, value] of images){
+    const blob = await this.b64toBlob(value);
+    zip.file(key+'.'+blob.type.split('/')[1],blob);
+  }
+
+  const archive = await zip.generateAsync({type : 'blob'});
+  return archive;
+}
+export function b64toBlob(b64Data): Promise<Blob>{
+  return fetch(b64Data).then(res => res.blob());
+}
+
+export async function  unZipScenario(blob: Blob): Promise<[string, Map<string, string | ArrayBuffer>]>{
+  const zip = new JSZip();
+  const archive = await zip.loadAsync(blob);
+  let json: string;
+  let images: Map<string,string | ArrayBuffer>;
+
+  await archive.forEach(async (relativePath, file) => {
+    if(file.name === 'ScenarioFile.json'){
+      json = await file.async('string');
+    }else{
+      images.set(file.name, await file.async('base64'));
+    }
+});
+
+  return [json,images];
+}
+
+
 export function loadScenarionFromJson(json: string): Scenario{
   const scenario: Scenario = Object.assign(new Scenario('','','',''),JSON.parse(json, jsonReviver));
   return scenario;

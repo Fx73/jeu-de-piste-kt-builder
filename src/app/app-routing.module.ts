@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '',
+    redirectTo: 'Home',
     pathMatch: 'full'
   },
   {

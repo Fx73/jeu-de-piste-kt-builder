@@ -24,5 +24,5 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   const auth = getAuth(firebaseApp);
 
   onAuthStateChanged(auth, (user) => {
-      AppComponent.setUserStatic(user);
+      AppComponent.appUser = user;
   });

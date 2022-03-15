@@ -44,7 +44,7 @@ export class EditionPage implements OnInit, OnDestroy {
   placeholdersize: number;
   placeholderindex = 0;
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor() {}
 
   ngOnInit() {
     this.placeholdersize = document
