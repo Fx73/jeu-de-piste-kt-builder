@@ -5,7 +5,6 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { StageElement, TYPE } from './game/element/stage_element';
 import { getImagesInJson, getScenarioInJson } from '../app.serialization';
 
-import { ActivatedRoute } from '@angular/router';
 import { Config } from 'src/app.config';
 import { Element } from './game/element/element';
 import { IonContent } from '@ionic/angular';

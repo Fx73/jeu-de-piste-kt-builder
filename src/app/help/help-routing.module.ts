@@ -1,9 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { ConditionsPage } from './conditions/conditions.page';
 import { HelpPage } from './help.page';
 import { NgModule } from '@angular/core';
-import { PrivacyPage } from './privacy/privacy.page';
 
 const routes: Routes = [
   {

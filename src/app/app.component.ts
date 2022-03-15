@@ -1,5 +1,3 @@
-import * as JSZip from 'jszip';
-
 import {
   FirebaseStorage,
   getStorage,
@@ -8,7 +6,6 @@ import {
 } from 'firebase/storage';
 import { Firestore, doc, getFirestore, setDoc } from 'firebase/firestore';
 import {
-  getImagesInJson,
   getScenarioInJson,
   loadScenarionFromJson,
   unZipScenario,
@@ -19,7 +16,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Scenario } from './edition/game/scenario';
 import { User } from 'firebase/auth';
-import { map } from '@firebase/util';
 
 @Component({
   selector: 'app-root',

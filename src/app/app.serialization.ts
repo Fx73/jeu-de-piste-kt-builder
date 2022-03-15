@@ -26,7 +26,7 @@ export async function  unZipScenario(blob: Blob): Promise<[string, Map<string, s
   const zip = new JSZip();
   const archive = await zip.loadAsync(blob);
   let json: string;
-  let images: Map<string,string | ArrayBuffer>;
+  const images: Map<string,string | ArrayBuffer> = new Map();
 
   await archive.forEach(async (relativePath, file) => {
     if(file.name === 'ScenarioFile.json'){
