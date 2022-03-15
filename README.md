@@ -2,6 +2,10 @@
 
 ![icon](./resources/ic_banner.png?raw=true)
 
+![IM2AG](https://img.shields.io/badge/IM2AG-Seal%20of%20Quality-blue)
+[![DeepScan grade](https://deepscan.io/api/teams/17167/projects/20535/branches/560870/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=17167&pid=20535&bid=560870)
+![Website](https://img.shields.io/website?up_message=kttrailgame-builder.web.app&url=https%3A%2F%2Fkttrailgame-builder.web.app)
+
 <h2>Presentation</h2>
 
 This web application is an interactive treasure hunt builder ('Jeu de piste' in french)
