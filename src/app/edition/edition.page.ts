@@ -170,30 +170,30 @@ export class EditionPage implements OnInit, OnDestroy {
   }
 
   addVariable() {
-    this.getScenario().variables.values.set('', 0);
+    this.getScenario().variables.variablesvalues.set('', 0);
   }
 
   removeVariable(name: string) {
-    this.getScenario().variables.values.delete(name);
+    this.getScenario().variables.variablesvalues.delete(name);
   }
 
   changeVariableName(oldname: string, event: any) {
     const variable: string = event.srcElement.value;
 
-    if(this.getScenario().variables.values.has(variable))
+    if(this.getScenario().variables.variablesvalues.has(variable))
       return;
 
-    const value: number =this.getScenario().variables.values.get(oldname);
+    const value: number =this.getScenario().variables.variablesvalues.get(oldname);
 
-    this.getScenario().variables.values.set(variable,value);
-    this.getScenario().variables.values.delete(oldname);
+    this.getScenario().variables.variablesvalues.set(variable,value);
+    this.getScenario().variables.variablesvalues.delete(oldname);
 
   }
 
   changeVariableValue(name: string, event: any) {
     const value: string = event.srcElement.value;
 
-    this.getScenario().variables.values[name] = value;
+    this.getScenario().variables.variablesvalues[name] = value;
   }
 
   //#endregion

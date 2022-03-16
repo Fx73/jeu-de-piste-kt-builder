@@ -1,6 +1,7 @@
 import * as JSZip from 'jszip';
 
 import { Scenario } from './edition/game/scenario';
+import { Variables } from './edition/game/variables';
 
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
 
@@ -40,13 +41,14 @@ export async function  unZipScenario(blob: Blob): Promise<[string, Map<string, s
 }
 
 
-export function loadScenarionFromJson(json: string): Scenario{
+export function loadScenarioFromJson(json: string): Scenario{
+  console.log(json);
   const scenario: Scenario = Object.assign(new Scenario('','','',''),JSON.parse(json, jsonReviver));
   return scenario;
 }
 
 export function loadImagesFromJson(json: string): Map<string,string | ArrayBuffer>{
-  const images: Map<string,string | ArrayBuffer> = JSON.parse(json, jsonReviver);
+  const images: Map<string,string | ArrayBuffer> = JSON.parse(json, jsonReviverArray);
   //const iObject: Map<string,string | ArrayBuffer> = Object.assign(new Map<string,string | ArrayBuffer> (),images);
   return images;
 }
@@ -56,13 +58,40 @@ export function getScenarioInJson(scenario: Scenario): string{
 }
 
 export function getImagesInJson(images: Map<string,string | ArrayBuffer>): string{
-  return JSON.stringify(images, jsonReplacer);
+  return JSON.stringify(images, jsonReplacerArray);
 }
 
 
 
-
 export function jsonReplacer(key: any, value: any) {
+  if(value instanceof Map) {
+    const obj = {};
+    for (const [k,v] of value.entries())
+      {obj[k]=v;}
+    return obj;
+  } else {
+    return value;
+  }
+}
+
+
+export function jsonReviver(key, value) {
+  if(typeof value === 'object' && value !== null) {
+    if (key === 'variablesvalues') {
+      const arr = Object.entries(value);
+      const map: Map<string,number> = new Map();
+      arr.forEach(element => {
+        map.set(element[0], Number(element[1]));
+      });
+      return map;
+    }
+  }
+  return value;
+}
+
+
+
+export function jsonReplacerArray(key: any, value: any) {
   if(value instanceof Map) {
     return {
       dataType: 'Map',
@@ -74,7 +103,7 @@ export function jsonReplacer(key: any, value: any) {
 }
 
 
-export function jsonReviver(key, value) {
+export function jsonReviverArray(key, value) {
   if(typeof value === 'object' && value !== null) {
     if (value.dataType === 'Map') {
       return new Map(value.value);

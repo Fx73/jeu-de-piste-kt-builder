@@ -55,7 +55,7 @@
 
           <ion-card-content>
             <ion-row>
-              <ion-col size="5">Variables {{getScenario().variables.values?.size}} </ion-col>
+              <ion-col size="5">Variables {{getScenario().variables.variablesvalues?.size}} </ion-col>
               <ion-col>
                 <ion-button size="small" expand="block" fill="outline" color="dark" (click)="addVariable()">Add
                 </ion-button>
@@ -63,7 +63,7 @@
             </ion-row>
             <ion-grid class="variablegrid">
 
-              <ion-row *ngFor="let variable of getScenario().variables.values | keyvalue;let i = index">
+              <ion-row *ngFor="let variable of getScenario().variables.variablesvalues | keyvalue;let i = index">
                 <ion-col>
                   <ion-input [id]="variable.key" class="varinput" [value]="variable.key" size="1" placeholder="Name"
                     (ionBlur)="changeVariableName(variable.key,$event)">
@@ -137,7 +137,7 @@
                       <ion-row>
                         <ion-col>
                           <ion-select placeholder="Variable" [(ngModel)]="element.content">
-                            <ion-select-option *ngFor="let variable of getScenario().variables.values | keyvalue;"
+                            <ion-select-option *ngFor="let variable of getScenario().variables.variablesvalues | keyvalue;"
                               [value]="variable.key"> {{variable.key}} </ion-select-option>
                           </ion-select>
                         </ion-col>
@@ -195,7 +195,7 @@
                             {{underelement.content}}</ion-button>
                           <ion-select [style]="underelement.type.toString() === 'VAR' ? '' : 'display:none'"
                             placeholder="Variable" [(ngModel)]="underelement.content">
-                            <ion-select-option *ngFor="let variable of getScenario().variables.values| keyvalue;"
+                            <ion-select-option *ngFor="let variable of getScenario().variables.variablesvalues| keyvalue;"
                               [value]="variable.key"> {{variable.key}
                             </ion-select-option>
                           </ion-select>

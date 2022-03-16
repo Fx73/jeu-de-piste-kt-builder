@@ -1,5 +1,3 @@
-import { EditionPage } from './../../edition.page';
-
 /**
  * StageElement
  * Elements used to show an item on screen

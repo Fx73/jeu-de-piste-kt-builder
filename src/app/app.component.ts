@@ -7,7 +7,7 @@ import {
 import { Firestore, doc, getFirestore, setDoc } from 'firebase/firestore';
 import {
   getScenarioInJson,
-  loadScenarionFromJson,
+  loadScenarioFromJson,
   unZipScenario,
   zipScenario,
 } from './app.serialization';
@@ -120,7 +120,7 @@ export class AppComponent {
     input.onchange = (e) => {
       unZipScenario((e.target as HTMLInputElement).files[0]).then(
         ([json, images]) => {
-          Scenario.set(loadScenarionFromJson(json));
+          Scenario.set(loadScenarioFromJson(json));
           Scenario.setImages(images);
           this.router.navigateByUrl('/Edition/' + Scenario.get().title);
         }

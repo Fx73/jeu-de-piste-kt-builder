@@ -6,7 +6,7 @@
 
 export class Variables{
   constructor(
-    public values: Map<string, number> = new Map()
+    public variablesvalues: Map<string, number> = new Map()
   ){}
 
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { collection, getDocs, } from 'firebase/firestore';
 import { getBlob, ref } from 'firebase/storage';
-import { loadImagesFromJson, loadScenarionFromJson, unZipScenario } from '../app.serialization';
+import { loadImagesFromJson, loadScenarioFromJson, unZipScenario } from '../app.serialization';
 
 import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
@@ -79,7 +79,7 @@ export class OpenFilePage implements OnInit {
   loadLocalScenario(){
     const s = localStorage.getItem('currentScenario');
     const a = localStorage.getItem('currentImages');
-    Scenario.set(loadScenarionFromJson(s));
+    Scenario.set(loadScenarioFromJson(s));
     Scenario.setImages(loadImagesFromJson(a));
     this.router.navigateByUrl('/Edition/'+Scenario.get().title);
   }
