@@ -7,7 +7,8 @@
 <ion-content fullscreen="true">
   <ion-grid>
 <ion-row>
-  <ion-col size="3">
+
+  <ion-col size="2">
     <ion-card class="cardplus" (click)="newScenario()">
         <ion-card-content>
           <ion-title size="large">New Scenario</ion-title>
@@ -15,6 +16,16 @@
         </ion-card-content>
     </ion-card>
   </ion-col>
+
+  <ion-col size="2">
+    <ion-card class="cardplus" (click)="newSharedScenario()">
+        <ion-card-content>
+          <ion-title size="large">Shared</ion-title>
+          <ion-icon [name]="'share-social'"></ion-icon>
+        </ion-card-content>
+    </ion-card>
+  </ion-col>
+
   <ion-col size="3">
     <ion-card class="scenariocard" color="secondary" (click)="loadLocalScenario()">
       <ion-title size="small" color="tertiary">Stored locally</ion-title>
@@ -28,18 +39,30 @@
       </ion-card-content>
     </ion-card>
   </ion-col>
-  <ion-col size="3" *ngFor="let sd of databaseDescriptors">
-    <ion-card class="scenariocard" (click)="loadDatabaseScenario(sd)">
+
+  <ion-col size="3" *ngFor="let sd of ownedDescriptors">
+    <ion-card class="scenariocard" (click)="loadOwnScenario(sd)">
       <ion-title size="large">{{sd.name}}</ion-title>
       <ion-card-content>
         <ion-text color="primary">{{sd.creator}}</ion-text>
         <ion-img  [src]="sd.icon"></ion-img>
-
         <ion-text>{{sd.description}}</ion-text>
-
       </ion-card-content>
     </ion-card>
   </ion-col>
+
+  <ion-col size="3" *ngFor="let sd of sharedDescriptors">
+    <ion-card class="scenariosharedcard" color="tertiary" (click)="loadSharedScenario(sd)">
+      <ion-title size="large">{{sd.name}}</ion-title>
+      <ion-card-content>
+        <ion-text color="danger">Owner : {{sd.owner}}</ion-text>
+        <ion-text color="primary">{{sd.creator}}</ion-text>
+        <ion-img  [src]="sd.icon"></ion-img>
+        <ion-text>{{sd.description}}</ion-text>
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+
 </ion-row>
 
   </ion-grid>

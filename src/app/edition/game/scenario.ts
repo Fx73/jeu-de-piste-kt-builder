@@ -61,8 +61,15 @@ constructor(
 
   }
 
-  public fileName(){
-    return this.title + '_' + this.creator + '.sc';
+
+  public key(): string{
+    return this.title + '_' + this.creator;
   }
+  public fileName(){
+    return this.key() + '.sc';
+  }
+
+
+
 
 }

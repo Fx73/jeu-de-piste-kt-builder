@@ -5,6 +5,7 @@ import {
   uploadBytes,
 } from 'firebase/storage';
 import { Firestore, doc, getFirestore, setDoc } from 'firebase/firestore';
+import { dbgetShareCode, dbsaveOwnedScenario } from './app.database';
 import {
   getScenarioInJson,
   loadScenarioFromJson,
@@ -33,6 +34,7 @@ export class AppComponent {
     { title: 'Save', method: this.saveFile, icon: 'save' },
     { title: 'Export', method: this.exportFile, icon: 'archive' },
     { title: 'Import', method: this.importFile, icon: 'download' },
+    { title: 'Share', method: this.share, icon: 'share-social' },
     { title: 'Account', method: this.account, icon: 'heart' },
     { title: 'Help', method: this.help, icon: 'information-circle' },
   ];
@@ -57,43 +59,11 @@ export class AppComponent {
 
   async saveFile() {
     if (!AppComponent.appUser) {
-      this.showToast('You need to be logged to save');
+      AppComponent.showToast('You need to be logged to save');
       return;
     }
 
-    const docData = {
-      name: Scenario.get().title ?? '',
-      creator: Scenario.get().creator ?? '',
-      desciption: Scenario.get().description ?? '',
-      icon: Scenario.getImage('ScenarioIcon') ?? '',
-    };
-    await setDoc(
-      doc(
-        AppComponent.db,
-        AppComponent.appUser?.uid,
-        Scenario.get().title + '_' + Scenario.get().creator
-      ),
-      docData
-    )
-      .then(() => {
-        zipScenario(
-          getScenarioInJson(Scenario.get()),
-          Scenario.getImages()
-        ).then((blob) => {
-          const fileRef = ref(
-            AppComponent.storage,
-            AppComponent.appUser.uid + '/' + Scenario.get().fileName()
-          );
-          uploadBytes(fileRef, blob).then((snapshot) => {
-            this.showToast('Saved !');
-          });
-        });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(errorCode);
-      });
+    dbsaveOwnedScenario(Scenario.get(),Scenario.getImages());
 
     console.log(getScenarioInJson(Scenario.get()));
   }
@@ -130,6 +100,17 @@ export class AppComponent {
     input.click();
   }
 
+share(){
+  if(!Scenario.get()){
+    AppComponent.showToast('Cool ! But you need to have a scnario first !');
+    return;
+  }
+  dbgetShareCode(Scenario.get()).then((code)=>{
+    AppComponent.showOKToast('Share code : ' + code);
+  });
+
+}
+
   account() {
     if (AppComponent.appUser) {
       this.router.navigate(['/Account']);
@@ -148,7 +129,8 @@ export class AppComponent {
     return AppComponent.appUser?.displayName ?? AppComponent.appUser?.email;
   }
 
-  showToast(text: string) {
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  static showToast(text: string) {
     const toast = document.createElement('ion-toast');
     toast.header = text;
     toast.duration = 1000;
@@ -156,5 +138,17 @@ export class AppComponent {
     toast.present();
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  static showOKToast(text: string) {
+    const toast = document.createElement('ion-toast');
+    toast.header = text;
+    toast.buttons = [{
+        side: 'end',
+        text: 'Close',
+        role: 'cancel'
+      }];
+    document.body.appendChild(toast);
+    toast.present();
+  }
   //#endregion
 }
