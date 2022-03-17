@@ -1,5 +1,7 @@
-import { CollectionReference, DocumentData, DocumentReference, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { StorageReference, ref, uploadBytes } from 'firebase/storage';
+/* eslint-disable max-len */
+
+import { CollectionReference, DocumentData, DocumentReference, QuerySnapshot, collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { getBlob, ref, uploadBytes } from 'firebase/storage';
 import { getScenarioInJson, zipScenario } from './app.serialization';
 
 import { AppComponent } from './app.component';
@@ -24,15 +26,33 @@ function dbCollRef(collec: string): CollectionReference<DocumentData>{
 }
 
 
-export function dbgetOwnedList(): CollectionReference<DocumentData>{
+export function dbgetOwnedList():  Promise<QuerySnapshot<DocumentData>>{
   const collectionRef = collection(AppComponent.db, ownKey());
-  return collectionRef;
+  return getDocs(collectionRef);
 }
 
-export function dbgetOwnedScenario(filename: string): StorageReference{
-  const fileRef = ref(AppComponent.storage, ownKey() + '/' + filename);
-  return fileRef;
+export function dbgetSharedList():  Promise<QuerySnapshot<DocumentData>>{
+  const collectionRef = collection(AppComponent.db, sharedKey());
+  return getDocs(collectionRef);
 }
+
+export function dbgetOwnedScenario(filename: string): Promise<Blob>{
+  const fileRef = ref(AppComponent.storage, ownKey() + '/' + filename);
+  return getBlob(fileRef);
+}
+
+export function dbsetOwnedScenario(filename: string, blob: Blob){
+  const fileRef = ref(AppComponent.storage, ownKey() + '/' + filename);
+  uploadBytes(fileRef, blob).then(() => {
+    AppComponent.showToast('File saved !');
+  });
+}
+
+export function dbgetUserScenario(user: string, filename: string): Promise<Blob>{
+  const fileRef = ref(AppComponent.storage, userKey(user) + '/' + filename);
+  return getBlob(fileRef);
+}
+
 
 export async function dbsaveOwnedScenario(scenario: Scenario, scenarioImages: Map<string,string |ArrayBuffer>){
   const sd = new ScenarioDescriptor(
@@ -49,13 +69,7 @@ export async function dbsaveOwnedScenario(scenario: Scenario, scenarioImages: Ma
         getScenarioInJson(scenario),
         scenarioImages
       ).then((blob) => {
-        const fileRef = ref(
-          AppComponent.storage,
-          ownKey() + '/' + scenario.fileName()
-        );
-        uploadBytes(fileRef, blob).then((snapshot) => {
-          AppComponent.showToast('Saved !');
-        });
+        dbsetOwnedScenario(scenario.fileName(),blob);
       });
     })
     .catch((error) => {
@@ -67,15 +81,9 @@ export async function dbsaveOwnedScenario(scenario: Scenario, scenarioImages: Ma
 }
 
 
-export function dbgetSharedList(): CollectionReference<DocumentData>{
-  const collectionRef = collection(AppComponent.db, sharedKey());
-  return collectionRef;
-}
 
-export function dbgetSharedScenario(filename: string): StorageReference{
-  const fileRef = ref(AppComponent.storage, sharedKey() + '/' + filename);
-  return fileRef;
-}
+
+
 
 export async function dbgetShareCode(scenario: Scenario): Promise<string>{
   let code: string;
@@ -149,4 +157,26 @@ export async function setdbSharedDescriptor(sd: ScenarioDescriptor){
     });
   }
 
+}
+
+
+export async function copydbSharedScenario(sd: ScenarioDescriptor){
+  const docSnap = await getDoc(dbDocRef(userKey(sd.owner),sd.key()));
+
+  if (docSnap.exists()) {
+    const fullsd: ScenarioDescriptor = new ScenarioDescriptor(
+      docSnap.data().name,
+      docSnap.data().creator,
+      docSnap.data().description,
+      docSnap.data().icon
+    );
+
+    setDoc(dbDocRef(ownKey(),fullsd.key()),fullsd.toObject())
+    .then(()=>{
+      dbgetUserScenario(sd.owner,fullsd.file()).then((blob)=>{
+        dbsetOwnedScenario(fullsd.file(),blob);
+      } );
+
+    });
+  }
 }

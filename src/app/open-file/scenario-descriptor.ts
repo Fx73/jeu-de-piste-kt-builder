@@ -26,7 +26,9 @@ export class ScenarioDescriptor {
   key(){
     return this.name + '_' + this.creator;
   }
-
+  file(){
+    return this.key() + '.sc';
+  }
 
 
 

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { collection, getDocs, } from 'firebase/firestore';
-import { dbgetOwnedList, dbgetOwnedScenario, dbgetSharedList, getdbSharedDescriptor, setdbSharedDescriptor } from '../app.database';
-import { getBlob, ref } from 'firebase/storage';
+import { copydbSharedScenario, dbgetOwnedList, dbgetOwnedScenario, dbgetSharedList, getdbSharedDescriptor } from '../app.database';
 import { loadImagesFromJson, loadScenarioFromJson, unZipScenario } from '../app.serialization';
 
 import { AlertController } from '@ionic/angular';
@@ -9,6 +7,7 @@ import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 import { Scenario } from './../edition/game/scenario';
 import { ScenarioDescriptor } from './scenario-descriptor';
+import { getDocs, } from 'firebase/firestore';
 
 @Component({
   selector: 'app-open-file',
@@ -56,7 +55,10 @@ export class OpenFilePage implements OnInit {
           text: 'Ok',
           handler: (data) => {
             getdbSharedDescriptor(data).then(sd=>{
-              setdbSharedDescriptor(sd);
+              copydbSharedScenario(sd).then(()=>{
+                this.router.navigateByUrl('Home');
+                AppComponent.showToast('Import finished ! \n The file has been copied to your account');
+              });
             });
           }
         }
@@ -85,7 +87,7 @@ export class OpenFilePage implements OnInit {
   }
 
   async loadOwnScenarioList(){
-    const querySnapshot = await getDocs(dbgetOwnedList());
+    const querySnapshot = await dbgetOwnedList();
 
     querySnapshot.forEach((docSnap) => {
       const sd = new ScenarioDescriptor(
@@ -100,7 +102,7 @@ export class OpenFilePage implements OnInit {
   }
 
   async loadSharedScenarioList(){
-    const querySnapshot = await getDocs(dbgetSharedList());
+    const querySnapshot = await dbgetSharedList();
 
     querySnapshot.forEach((docSnap) => {
       const sd = new ScenarioDescriptor(
@@ -127,11 +129,9 @@ export class OpenFilePage implements OnInit {
 
 
 
-  loadOwnScenario(sd: any){
-    const fileRef = dbgetOwnedScenario(sd.name + '_' + sd.creator + '.sc');
-    getBlob(fileRef).then((blob)=>{
+  loadOwnScenario(sd: ScenarioDescriptor){
+    dbgetOwnedScenario(sd.key() + '.sc').then((blob)=>{
       unZipScenario(blob);
-
     });
   }
 
