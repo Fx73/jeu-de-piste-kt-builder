@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { copydbSharedScenario, dbgetOwnedList, dbgetOwnedScenario, dbgetSharedList, getdbSharedDescriptor } from '../app.database';
+import {
+   copydbSharedScenario,
+   dbgetOwnedList,
+   dbgetOwnedScenario,
+   dbgetShareCode,
+   dbgetSharedList,
+   deletedbScenario,
+   getdbSharedDescriptor
+} from '../app.database';
 import { loadImagesFromJson, loadScenarioFromJson, unZipScenario } from '../app.serialization';
 
 import { AlertController } from '@ionic/angular';
@@ -7,7 +15,7 @@ import { AppComponent } from '../app.component';
 import { Router } from '@angular/router';
 import { Scenario } from './../edition/game/scenario';
 import { ScenarioDescriptor } from './scenario-descriptor';
-import { getDocs, } from 'firebase/firestore';
+import { actionSheetController } from '@ionic/core';
 
 @Component({
   selector: 'app-open-file',
@@ -19,6 +27,8 @@ export class OpenFilePage implements OnInit {
   ownedDescriptors = Array();
   sharedDescriptors = Array();
   localDescriptor = null;
+
+
 
   constructor(private router: Router,public alertController: AlertController) { }
 
@@ -135,11 +145,42 @@ export class OpenFilePage implements OnInit {
     });
   }
 
+
+
+  async contextOwn(event: any,sd: ScenarioDescriptor){
+    event.preventDefault();
+    actionSheetController.create({
+      header: sd.name,
+      buttons: [
+        { text: 'Delete', role: 'destructive' , icon: 'trash', handler: () => this.deleteScenario(sd)},
+        { text: 'Share', icon: 'share-social', handler: ()=> this.shareScenario(sd)},
+        { text: 'Cancel', role: 'cancel' },
+      ],
+    }).then((as)=>{
+      as.present();
+    });
+  }
+
+
+  deleteScenario(sd: ScenarioDescriptor){
+    deletedbScenario(sd).then(()=>{
+      AppComponent.showToast('Deleted !');
+      this.router.navigateByUrl('/Home');
+    });
+  }
+
+  shareScenario(sd: ScenarioDescriptor){
+    dbgetShareCode(sd).then((code)=>{
+      AppComponent.showOKToast('Share code : ' + code);
+    });  }
+
+
   loadSharedScenario(sd: any){
 
   }
 
-
+  contextShared(event: any, sd: ScenarioDescriptor){
+  }
 
 //#endregion
 }

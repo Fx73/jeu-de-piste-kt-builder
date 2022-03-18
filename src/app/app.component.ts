@@ -34,7 +34,6 @@ export class AppComponent {
     { title: 'Save', method: this.saveFile, icon: 'save' },
     { title: 'Export', method: this.exportFile, icon: 'archive' },
     { title: 'Import', method: this.importFile, icon: 'download' },
-    { title: 'Share', method: this.share, icon: 'share-social' },
     { title: 'Account', method: this.account, icon: 'heart' },
     { title: 'Help', method: this.help, icon: 'information-circle' },
   ];
@@ -99,17 +98,6 @@ export class AppComponent {
 
     input.click();
   }
-
-share(){
-  if(!Scenario.get()){
-    AppComponent.showToast('Cool ! But you need to have a scnario first !');
-    return;
-  }
-  dbgetShareCode(Scenario.get()).then((code)=>{
-    AppComponent.showOKToast('Share code : ' + code);
-  });
-
-}
 
   account() {
     if (AppComponent.appUser) {

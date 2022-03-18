@@ -41,19 +41,43 @@
   </ion-col>
 
   <ion-col size="3" *ngFor="let sd of ownedDescriptors">
-    <ion-card class="scenariocard" (click)="loadOwnScenario(sd)">
-      <ion-title size="large">{{sd.name}}</ion-title>
+    <ion-card class="scenariocard" (click)="loadOwnScenario(sd)" (contextmenu)="contextOwn($event,sd)">
+      <ion-toolbar>
+        <ion-buttons slot="primary">
+          <ion-button (click)="contextOwn($event,sd)">
+            <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+
+        <ion-title size="large">{{sd.name}}</ion-title>
+      </ion-toolbar>
+
+      <ion-buttons slot="end">
+        <ion-button>
+          <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+        </ion-button>
+      </ion-buttons>
       <ion-card-content>
         <ion-text color="primary">{{sd.creator}}</ion-text>
         <ion-img  [src]="sd.icon"></ion-img>
         <ion-text>{{sd.description}}</ion-text>
       </ion-card-content>
+
     </ion-card>
   </ion-col>
 
   <ion-col size="3" *ngFor="let sd of sharedDescriptors">
-    <ion-card class="scenariosharedcard" color="tertiary" (click)="loadSharedScenario(sd)">
-      <ion-title size="large">{{sd.name}}</ion-title>
+    <ion-card class="scenariosharedcard" color="tertiary" (click)="loadSharedScenario(sd)" (contextmenu)="contextShared($event,sd)">
+      <ion-toolbar>
+        <ion-buttons slot="primary">
+          <ion-button (click)="contextShared($event,sd)">
+            <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+
+        <ion-title size="large">{{sd.name}}</ion-title>
+      </ion-toolbar>
+
       <ion-card-content>
         <ion-text color="danger">Owner : {{sd.owner}}</ion-text>
         <ion-text color="primary">{{sd.creator}}</ion-text>
@@ -66,5 +90,4 @@
 </ion-row>
 
   </ion-grid>
-
 </ion-content>

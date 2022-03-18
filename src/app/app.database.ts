@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { CollectionReference, DocumentData, DocumentReference, QuerySnapshot, collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { CollectionReference, DocumentData, DocumentReference, QuerySnapshot, collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 import { getBlob, ref, uploadBytes } from 'firebase/storage';
 import { getScenarioInJson, zipScenario } from './app.serialization';
 
@@ -85,9 +85,9 @@ export async function dbsaveOwnedScenario(scenario: Scenario, scenarioImages: Ma
 
 
 
-export async function dbgetShareCode(scenario: Scenario): Promise<string>{
+export async function dbgetShareCode(sd: ScenarioDescriptor): Promise<string>{
   let code: string;
-  const docSnap = await getDoc(dbDocRef(ownKey(),scenario.key()));
+  const docSnap = await getDoc(dbDocRef(ownKey(),sd.key()));
 
   if (docSnap.exists()) {
     code = docSnap.data().sharecode;
@@ -97,19 +97,17 @@ export async function dbgetShareCode(scenario: Scenario): Promise<string>{
 
   if(!code){
     code = makeid(20);
-    await updateDoc(dbDocRef(ownKey(),scenario.key()),{ sharecode: code });
+    await updateDoc(dbDocRef(ownKey(),sd.key()),{ sharecode: code });
   }
 
-  console.log('code is ' + code);
 
-  const sd = ScenarioDescriptor.sharedFactory(
-    scenario.title,
-    scenario.creator,
+  const sdShared = ScenarioDescriptor.sharedFactory(
+    sd.name,
+    sd.creator,
     AppComponent.appUser.uid
   );
-  console.log(sd);
 
-  await setDoc(dbDocRef(sharedLibrary, code),  sd.toObject(),{ merge: true });
+  await setDoc(dbDocRef(sharedLibrary, code),  sdShared.toObject(),{ merge: true });
 
   return code;
 }
@@ -179,4 +177,8 @@ export async function copydbSharedScenario(sd: ScenarioDescriptor){
 
     });
   }
+}
+
+export async function deletedbScenario(sd: ScenarioDescriptor){
+  await deleteDoc(dbDocRef(ownKey(),sd.key()));
 }
