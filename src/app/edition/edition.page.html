@@ -70,7 +70,7 @@
                   </ion-input>
                 </ion-col>
                 <ion-col>
-                  <ion-input [id]="variable.key" class="varinput" [value]="variable.value" size="1" placeholder="Value"
+                  <ion-input [id]="variable.key" class="varinput" [value]="variable.value" size="1" placeholder="Value" inputmode="numeric"
                     (ionBlur)="changeVariableValue(variable.key, $event)">
                   </ion-input>
                 </ion-col>
@@ -92,9 +92,12 @@
           <ion-grid>
 
             <ion-row class="ion-no-padding">
-              <ion-col size="9">
+              <ion-col size="8">
                 <ion-label position="stacked">Name</ion-label>
-                <ion-input id="name" [(ngModel)]="stage.name" (ionChange)="updateStageName($event)"></ion-input>
+                <ion-input id="name" [(ngModel)]="stage.name" (ionChange)="stageNameUpdate($event)"></ion-input>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon class="ion-no-padding" name="close-circle" (click)="stageRemove(i)"></ion-icon>
               </ion-col>
               <ion-col size="1">
                 <ion-icon class="ion-no-padding" name="caret-back" (click)="stageMove(i,i-1)"></ion-icon>
@@ -164,8 +167,11 @@
                 <ion-card id="gameundercard" class="elementcard"
                   *ngFor="let understage of stage.understages;let k = index">
                   <ion-row class="ion-no-padding">
-                    <ion-col size="11">
+                    <ion-col size="10">
                       <ion-input [(ngModel)]="understage.name">Name : </ion-input>
+                    </ion-col>
+                    <ion-col size="1">
+                      <ion-icon class="ion-no-padding" name="close-circle" (click)="understageRemove(i,k)"></ion-icon>
                     </ion-col>
                     <ion-col size="1">
                       <ion-input class="ion-no-padding" #inputpos [value]="k" type="number" inputmode="numeric" min="0"
@@ -216,7 +222,7 @@
                   </ion-row>
                 </ion-card>
 
-                <ion-card class="cardplussmall" (click)="addUnderStage(i)">
+                <ion-card class="cardplussmall" (click)="underStageAdd(i)">
                   <ion-card-content>
                     <ion-icon [name]="'add'"></ion-icon>
                   </ion-card-content>
@@ -242,7 +248,7 @@
 
       <!-- Cards Plus -->
       <ion-col>
-        <ion-card class="cardplus" (click)="addStage()">
+        <ion-card class="cardplus" (click)="stageAdd()">
           <ion-card-content>
             <ion-icon [name]="'add'"></ion-icon>
           </ion-card-content>

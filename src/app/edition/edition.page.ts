@@ -90,7 +90,7 @@ export class EditionPage implements OnInit, OnDestroy {
   //#endregion
 
   //Region Model
-  addStage() {
+  stageAdd() {
     this.getScenario().stages.push(new Stage(''));
   }
 
@@ -98,7 +98,7 @@ export class EditionPage implements OnInit, OnDestroy {
     moveItemInArray(this.getScenario().stages, sender, target);
   }
 
-  updateStageName(event: any) {
+  stageNameUpdate(event: any) {
     const val = event.detail.value;
     for (const stage of this.getScenario().stages) {
       const next = Object.assign(new Array<string>(), stage.next);
@@ -111,7 +111,11 @@ export class EditionPage implements OnInit, OnDestroy {
     }
   }
 
-  addUnderStage(stageindex: number) {
+  stageRemove(sender: number){
+    this.getScenario().stages.splice(sender,1);
+  }
+
+  underStageAdd(stageindex: number) {
     if (!this.getScenario().stages[stageindex].understages) {
       this.getScenario().stages[stageindex].understages = new Array();
     }
@@ -124,6 +128,10 @@ export class EditionPage implements OnInit, OnDestroy {
       undersender,
       target
     );
+  }
+
+  understageRemove(sender: number, undersender: number){
+    this.getScenario().stages[sender].understages.splice(undersender,1);
   }
 
   elementMove(event: CdkDragDrop<string[]>) {
