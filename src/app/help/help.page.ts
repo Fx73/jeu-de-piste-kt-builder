@@ -34,7 +34,7 @@ export class HelpPage implements OnInit {
       case 'UCK': return 'Free the lock on the written stage, allowing the user to go to this stage';
       case 'VAR': return 'Affect a value to a variable. Permit simple operations';
       case 'MAP': return 'Show a button than open a maps window. Need the button message, latitude and longitude';
-      default: return 'Unknown type';
+      default: return 'Type not referenced';
     }
   }
 }

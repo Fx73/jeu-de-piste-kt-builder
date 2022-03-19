@@ -20,6 +20,60 @@
 <ion-content>
 <ion-img src="assets/Help.png"></ion-img>
 
+<ion-card>
+  <ion-label position="stacked"> Conditions </ion-label><br>
+  <ion-card-content>
+
+    Conditions can be used to define if an element will be hidden. By default, every element is shown.
+<br><br>
+    You can use the following tokens :
+    <ul>
+      <li>
+        V as a value. Can be :
+        <ul>
+          <li> Variable (use the name you defined at the beginning of the scenario !)</li>
+          <li> Integer</li>
+        </ul>
+      </li>
+      <li>
+        COMP as Comparison. Can be :
+        <ul>
+          <li> == as equality test</li>
+          <li> != as inequality test</li>
+        </ul>
+      </li>
+      <li>
+        LOGIC as Logical. Can be :
+        <ul>
+          <li> && as comparison AND comparison </li>
+          <li> || as comparison OR comparison</li>
+        </ul>
+      </li>
+    </ul>
+    You can use the following syntax :
+    <ul>
+      <li>
+        V COMP V
+      </li>
+      <li>
+        V COMP V LOGIC V COMP V
+      </li>
+    </ul>
+    Logical operators priority are respected : all && are evaluated before all || (as x would be evaluated before +)
+<br><br>
+Example :
+    <ion-card>
+      <ion-card-content>
+       Variable1 == 1 || Variable1 == Variable2
+      </ion-card-content>
+    </ion-card>
+    <br>
+
+  </ion-card-content>
+
+</ion-card>
+
+
 <ion-card [id]="tool.type" class="toolcard" cdkDrag *ngFor="let tool of getTools();">
 <ion-icon [name]="tool.icon"></ion-icon>
 <ion-label position="stacked"> {{tool.name}}</ion-label><br>

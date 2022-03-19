@@ -1,5 +1,6 @@
 /* eslint-disable curly */
 
+import { AlertController, IonContent } from '@ionic/angular';
 import { CdkDragDrop, Point, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { StageElement, TYPE } from './game/element/stage_element';
@@ -7,7 +8,6 @@ import { getImagesInJson, getScenarioInJson } from '../app.serialization';
 
 import { Config } from 'src/app.config';
 import { Element } from './game/element/element';
-import { IonContent } from '@ionic/angular';
 import { Scenario } from './game/scenario';
 import { Stage } from './game/stage';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -43,7 +43,7 @@ export class EditionPage implements OnInit, OnDestroy {
   placeholdersize: number;
   placeholderindex = 0;
 
-  constructor() {}
+  constructor(public alertController: AlertController) {}
 
   ngOnInit() {
     this.placeholdersize = document
@@ -204,6 +204,45 @@ export class EditionPage implements OnInit, OnDestroy {
     this.getScenario().variables.variablesvalues[name] = value;
   }
 
+
+  conditionElement(sender: number, undersender: number, elemnum: number){
+    let element: StageElement;
+    let header: string;
+    if(undersender === -1){
+      element = this.getScenario().stages[sender].elements[elemnum];
+      header = 'Condition of element '+elemnum+' of stage "' + this.getScenario().stages[sender].name + '"';
+    }else{
+      element = this.getScenario().stages[sender].understages[undersender].elements[elemnum];
+      header = 'Condition of element '+elemnum+' of stage "' + this.getScenario().stages[sender].name + '" of understage "'+
+        this.getScenario().stages[sender].understages[undersender].name + '"' ;
+    }
+
+    this.alertController.create({
+      header,
+      inputs: [
+        {
+          name: 'Condition',
+          type: 'text',
+          value: element.condition
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: 'Save',
+          handler: (data) => {
+            element.condition = data.Condition;
+          }
+        }
+      ]
+    }).then((alert)=>{
+      alert.present();
+    });
+  }
+
   //#endregion
 
   //#region Visibility
@@ -303,7 +342,6 @@ export class EditionPage implements OnInit, OnDestroy {
       scroll.scrollLeft -= event.deltaY;
     });
 
-    event.preventDefault();
   }
 
   dropTool(event: CdkDragDrop<string[]>) {

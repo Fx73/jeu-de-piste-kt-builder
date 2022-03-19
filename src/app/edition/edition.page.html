@@ -110,13 +110,21 @@
                 <ion-icon class="ion-no-padding" name="caret-forward" (click)="stageMove(i,i+1)"></ion-icon>
               </ion-col>
             </ion-row>
-
             <ion-row id="gamecontent">
               <ion-label>&nbsp; Stage content:</ion-label>
               <ion-col id="{{i}}" class="droplist" size="12" cdkDropList>
                 <ion-card class="elementcard" *ngFor="let element of stage.elements;let j = index" cdkDrag
                   (cdkDragDropped)="elementMove($event)">
-                  <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col>
+                        <ion-icon [name]="getElementIcon(element)"></ion-icon><br>
+                      </ion-col>
+                      <ion-col size = 2>
+                        <ion-button class="conditionbutton" size="small" color="medium" (click)="conditionElement(i,-1,j)">conditions</ion-button>
+                      </ion-col>
+                  </ion-row>
+                  </ion-grid>
 
                   <div>
                     <ion-input [style]="ionInputVisible(element)" [(ngModel)]="element.content"></ion-input>
@@ -184,8 +192,17 @@
                     <ion-col id="{{k}}" class="droplist" size="12" cdkDropList>
                       <ion-card class="elementcard" *ngFor="let underelement of understage.elements;let j = index"
                         cdkDrag (cdkDragDropped)="underelementMove($event,i)">
-                        <ion-icon [name]="getElementIcon(underelement)"></ion-icon><br>
-                        <div>
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col>
+                              <ion-icon [name]="getElementIcon(underelement)"></ion-icon><br>
+                            </ion-col>
+                            <ion-col size = 2>
+                              <ion-button class="conditionbutton" size="small" color="medium" (click)="conditionElement(i,k,j)">conditions</ion-button>
+                            </ion-col>
+                        </ion-row>
+                        </ion-grid>
+                          <div>
                           <ion-input [style]="ionInputVisible(underelement)" [(ngModel)]="underelement.content">
                           </ion-input>
                           <ion-input [style]="ionInputPlaceHolderVisible(underelement)"

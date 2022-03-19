@@ -48,7 +48,6 @@ export class OpenFilePage implements OnInit {
 
   newSharedScenario(){
     this.alertController.create({
-      cssClass: 'my-custom-class',
       header: 'Enter code !',
       inputs: [
         {

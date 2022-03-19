@@ -10,6 +10,7 @@ export enum TYPE{
 }
 
 export class StageElement{
+  condition = '';
 constructor(
   public type: TYPE,
   public content: string,
