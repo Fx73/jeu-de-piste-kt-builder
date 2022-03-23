@@ -34,7 +34,7 @@ export class AppComponent {
     { title: 'Save', method: this.saveFile, icon: 'save' },
     { title: 'Export', method: this.exportFile, icon: 'archive' },
     { title: 'Import', method: this.importFile, icon: 'download' },
-    { title: 'Account', method: this.account, icon: 'heart' },
+    { title: 'Account', method: this.account, icon: 'person-circle' },
     { title: 'Help', method: this.help, icon: 'information-circle' },
   ];
 
