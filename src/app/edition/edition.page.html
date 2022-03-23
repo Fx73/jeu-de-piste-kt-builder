@@ -219,7 +219,7 @@
                           <ion-select [style]="underelement.type.toString() === 'VAR' ? '' : 'display:none'"
                             placeholder="Variable" [(ngModel)]="underelement.content">
                             <ion-select-option *ngFor="let variable of getScenario().variables.variablesvalues| keyvalue;"
-                              [value]="variable.key"> {{variable.key}
+                              [value]="variable.key"> {{variable.key}}
                             </ion-select-option>
                           </ion-select>
                           <ion-card [style]="underelement.type.toString() === 'TST' ? '' : 'display:none'">
